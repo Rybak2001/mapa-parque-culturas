@@ -65,24 +65,49 @@ Crear un mapa ilustrado (estilo del mapa promo) del **Parque de las Culturas y d
 
 ### Prompt para Gemini (adjuntar original.png + mapa_promo):
 ```
-Te adjunto una ortofoto aérea real de un parque y su mapa promocional 
-ilustrado. Necesito que generes una IMAGEN JPG de 1400x700 píxeles con 
-fondo beige claro (#D4C9A8) que muestre SOLO la silueta/forma del terreno 
-del parque, sin edificios, sin árboles, sin texto, sin personas.
+Estoy creando un mapa ilustrado de un parque por capas. Te adjunto:
+- Imagen 1: ortofoto aérea real tomada con dron (esta es la FORMA REAL)
+- Imagen 2: mapa promocional ilustrado (este es el ESTILO que quiero copiar)
 
-Lo que debe incluir esta capa:
-- La silueta del perímetro del parque (forma de medialuna/riñón)
-- Zonas de tierra/plaza en color marrón arena (#C4A882)
-- Zonas de césped en verde claro (#8DB564)
-- El estacionamiento largo en la parte inferior en gris (#9E9E9E)
-- Las zonas donde irá bosque (lado derecho) en verde medio (#5D8A3C) 
-  como mancha de color plana, SIN dibujar árboles individuales
+Necesito que generes la PRIMERA CAPA: solo el terreno.
 
-Estilo: flat design, colores sólidos y planos, sin sombras, sin texturas 
-fotográficas. Similar al estilo del mapa promocional adjunto.
+ESPECIFICACIONES TÉCNICAS:
+- Formato: imagen JPG
+- Tamaño: 1400 x 700 píxeles
+- Fondo: beige claro (#D4C9A8)
 
-NO incluyas: edificios, árboles individuales, texto, números, íconos, 
-personas, nubes, decoraciones. Solo la forma del terreno con zonas de color.
+QUÉ DIBUJAR — Copia la FORMA de la ortofoto, pero con el ESTILO del mapa promo:
+
+1. SILUETA del parque: forma de medialuna/riñón vista desde arriba.
+   El borde izquierdo es más estrecho (zona de ingreso), se ensancha 
+   hacia el centro, y la parte derecha sube formando una loma con bosque.
+   Bordes CURVOS y orgánicos, nada rectangular.
+
+2. ZONAS DE COLOR (planas, sin textura, sin gradiente):
+   - Zona de plaza/tierra (centro-izquierda): marrón arena (#C4A882)
+   - Zona de césped (disperso): verde claro (#8DB564)
+   - Zona de bosque (todo el lado derecho, ~40% del mapa): verde medio 
+     (#5D8A3C) como mancha plana de color. NO dibujes árboles individuales.
+   - Estacionamiento (franja larga horizontal en la parte inferior): 
+     gris (#9E9E9E), forma rectangular alargada
+   - Zona de desnivel/colina (arriba izquierda): marrón claro (#D4B896)
+
+3. ESTILO: Flat design idéntico al mapa promo adjunto:
+   - Colores 100% sólidos y planos
+   - SIN sombras, SIN gradientes, SIN texturas fotográficas
+   - SIN efectos 3D ni relieve
+   - Bordes limpios entre zonas de color
+
+PROHIBIDO en esta capa (esto irá en capas posteriores):
+❌ Edificios o estructuras
+❌ Árboles individuales
+❌ Caminos o senderos
+❌ Texto, números, íconos, flechas
+❌ Personas, vehículos, animales
+❌ Nubes, sol, decoraciones
+❌ Elementos fuera de la silueta del parque
+
+SOLO genera la silueta del terreno con zonas de color plano.
 ```
 
 ### Tu trabajo manual después:
@@ -99,45 +124,82 @@ personas, nubes, decoraciones. Solo la forma del terreno con zonas de color.
 
 ### Prompt de refinamiento (adjuntar tu versión corregida):
 ```
-Te adjunto mi versión corregida de la capa de terreno del mapa. 
-Necesito que la mejores manteniendo MIS correcciones:
+Te adjunto MI versión corregida de la capa de terreno. Hice estos 
+cambios que DEBES mantener exactamente:
 
-[Describe qué corregiste, por ejemplo:]
-- Ajusté la silueta del borde izquierdo para que sea más curva
-- El estacionamiento ahora está más abajo
-- La zona de bosque es más grande
+[LLENAR — Describe qué cambiaste, ej:]
+- Recorté el borde izquierdo para que sea más curvo como en la ortofoto
+- Moví el estacionamiento 50px más abajo
+- Agrandé la zona de bosque (ahora ocupa más del lado derecho)
+- Cambié el color de la plaza de marrón a marrón arena más claro
 
-Genera una nueva versión JPG de 1400x700 que mantenga estos cambios 
-y mejore: [lo que quieras mejorar, ej: "suaviza los bordes", 
-"hazla más similar al mapa promo"]
+Lo que necesito que MEJORES (sin cambiar lo que yo corregí):
+[LLENAR — ej:]
+- Suaviza los bordes de la silueta, se ven dentados
+- La transición entre la zona de césped y la zona de bosque se ve 
+  muy brusca, hazla más gradual
+- El estacionamiento debe tener esquinas redondeadas
+
+ESPECIFICACIONES: misma imagen JPG de 1400x700, mismos colores, 
+mismo estilo flat. Respeta MIS posiciones y formas, solo mejora lo 
+que te pido.
 ```
 
 ---
 
 ## FASE 2: CAPA DE CAMINOS Y SENDEROS
 
-### Prompt para Gemini (adjuntar tu terreno corregido + original.png + mapa_promo):
+### Prompt para Gemini (adjuntar tu terreno corregido + original.png):
 ```
-Te adjunto 2 imágenes:
-1. Mi capa de terreno ya corregida del parque
-2. La ortofoto aérea real (original.png)
+Estoy creando un mapa ilustrado por capas. Te adjunto:
+- Imagen 1: mi capa de terreno ya corregida (ESTA es la forma correcta 
+  del parque, usa esta como referencia de posición)
+- Imagen 2: la ortofoto aérea real (para ver dónde están los caminos reales)
 
-Genera una imagen JPG de 1400x700 con FONDO BLANCO que muestre 
-SOLAMENTE los caminos y senderos del parque. Esta imagen la voy a 
-superponer sobre la capa de terreno.
+Necesito la SEGUNDA CAPA: solo caminos y senderos.
 
-Debe incluir:
-- Camino principal que cruza el parque de izquierda a derecha (gris claro #BDBDBD)
-- Caminos secundarios que conectan las zonas (gris más claro #D5D5D5)
-- Senderos en la zona boscosa (derecha) como líneas curvas más delgadas
-- Las escalinatas/rampas que conectan niveles (el parque tiene desniveles)
+ESPECIFICACIONES TÉCNICAS:
+- Formato: imagen JPG
+- Tamaño: exactamente 1400 x 700 píxeles (MISMO tamaño que mi terreno)
+- Fondo: BLANCO PURO (#FFFFFF) — yo voy a recortar el fondo después
 
-Los caminos deben coincidir con las posiciones visibles en la ortofoto.
-Estilo flat, líneas limpias, sin texturas. Las líneas deben tener grosor 
-visible (como en el mapa promo donde se ven los caminos).
+QUÉ DIBUJAR:
 
-NO incluyas: terreno, edificios, árboles, texto, íconos. 
-Solo caminos sobre fondo blanco.
+1. CAMINO PRINCIPAL (el más ancho, ~12-15px de grosor):
+   - Color: gris (#BDBDBD)
+   - Recorre el parque de izquierda a derecha siguiendo la forma 
+     visible en la ortofoto
+   - Tiene curvas suaves, NO es recto
+
+2. CAMINOS SECUNDARIOS (grosor ~8-10px):
+   - Color: gris más claro (#D5D5D5)
+   - Conectan las diferentes zonas del parque entre sí
+   - Van del camino principal hacia arriba (a la zona del mirador) 
+     y hacia las zonas de juegos
+
+3. SENDEROS DEL BOSQUE (grosor ~4-6px):
+   - Color: gris terroso (#C5B9A5)
+   - Líneas curvas y sinuosas que serpentean por la zona boscosa 
+     (lado derecho del mapa)
+   - Conectan las casitas y zonas de juegos dentro del bosque
+
+4. ESCALINATAS/RAMPAS:
+   - Donde hay desniveles (visible en la ortofoto como cambios de 
+     nivel), dibujar líneas transversales cortas que representen 
+     escalones
+
+IMPORTANTE — Las posiciones de los caminos deben COINCIDIR con mi capa 
+de terreno. Si mi terreno tiene la plaza en el centro-izquierda, los 
+caminos deben pasar por ahí.
+
+ESTILO: Líneas limpias, bordes definidos, flat design. Sin textura, 
+sin sombra, sin 3D.
+
+PROHIBIDO:
+❌ Terreno, colores de fondo (solo fondo blanco)
+❌ Edificios, árboles, vegetación
+❌ Texto, números, íconos
+❌ Cualquier elemento que no sea camino/sendero
 ```
 
 ### Tu trabajo manual después:
@@ -154,12 +216,24 @@ Solo caminos sobre fondo blanco.
 
 ### Prompt de refinamiento (adjuntar terreno+caminos juntos):
 ```
-Te adjunto cómo quedó mi mapa con la capa de terreno + caminos superpuestos.
-[Describe problemas, ej: "el camino principal debería curvarse más hacia 
-la derecha", "falta un sendero que conecta el mirador con la cafetería"]
+Te adjunto mi mapa con terreno + caminos superpuestos. La capa de 
+caminos tiene estos problemas:
 
-Genera una versión mejorada de SOLO la capa de caminos (fondo blanco, 
-1400x700) con estas correcciones.
+[LLENAR con lo que veas mal, ej:]
+- El camino principal no coincide con la ortofoto — debería curvarse 
+  más hacia la derecha en la zona central
+- Falta un sendero que va desde [punto A] hasta [punto B]
+- El camino de la zona del bosque es demasiado recto, debería 
+  serpentear más
+- Hay un camino que no existe en la realidad — bórralo
+- Los caminos son muy delgados, hazlos 2px más gruesos
+
+Genera una nueva versión de SOLO la capa de caminos:
+- JPG 1400x700, fondo blanco
+- Mantén los caminos que están bien
+- Corrige SOLO los problemas que te indiqué
+- Mismos colores y grosor que la versión anterior (a menos que 
+  te pida cambiarlo)
 ```
 
 ---
@@ -323,6 +397,109 @@ Genera 3 variantes diferentes del domo geodésico Chiwiña:
 Mismo estilo flat, fondo blanco, 250x200 px cada uno. Ponlos en fila.
 ```
 
+### PASO 3.5 — Integrar edificios al mapa (que no se vean "pegados")
+
+Los edificios generados por Gemini probablemente se ven "pegados" sobre 
+el mapa — no combinan con el terreno/caminos. Hay dos caminos: arreglarlo 
+a mano o pedirle a Gemini que los redibuje integrados.
+
+#### Opción A: Prompt para Gemini — Redibujar edificio integrado al mapa
+Adjunta tu mapa en progreso CON el edificio ya posicionado:
+```
+Te adjunto mi mapa en progreso del Parque de las Culturas. Ya tengo los
+edificios posicionados en su lugar correcto, pero se ven "pegados" y no
+se integran con el estilo del terreno y caminos.
+
+Necesito que REDIBUJES SOLO el edificio [NOMBRE] (el que está en [POSICIÓN])
+manteniendo EXACTAMENTE la misma posición y tamaño, pero:
+
+1. Adapta su paleta de colores a estos tonos del mapa:
+   - Techos: naranja cálido (#D4874E) o marrón (#8B6538)
+   - Paredes: beige (#E8D5B7) o blanco hueso (#F5F0E1)
+   - Domo geodésico (Chiwiña): azul-verde (#4ABFB2) y turquesa (#2E9E8F)
+   - Contornos: marrón oscuro (#4A3728), grosor 2-3px
+
+2. Agrega un contorno marrón oscuro (#4A3728) alrededor del edificio,
+   consistente con el estilo flat design del mapa promo.
+
+3. Agrega una sombra sutil: una elipse gris oscuro semi-transparente
+   debajo y ligeramente detrás del edificio (como si el sol viniera
+   del noroeste).
+
+4. En la base del edificio, haz una transición suave con el color del
+   terreno que hay debajo — no debe haber un corte recto entre edificio
+   y suelo.
+
+Genera la imagen completa de 1400x700 con FONDO BLANCO mostrando SOLO
+ese edificio redibujado (para que yo lo pegue en mi mapa).
+```
+
+#### Opción B: Prompt para Gemini — Integrar TODOS los edificios de golpe
+Si prefieres hacer todos a la vez, adjunta tu mapa completo en progreso:
+```
+Te adjunto mi mapa en progreso del Parque de las Culturas con terreno,
+caminos y edificios. Los edificios están en las posiciones correctas pero
+NO se integran bien con el estilo del mapa — se ven "pegados".
+
+Necesito que generes una nueva versión de SOLO la capa de edificios
+(imagen JPG 1400x700, fondo blanco) donde TODOS los edificios:
+
+1. Estén en las MISMAS posiciones y tamaños que en mi mapa actual
+2. Tengan esta paleta de colores unificada:
+   - Contornos: marrón oscuro (#4A3728), grosor consistente 2-3px
+   - Techos: naranja cálido (#D4874E), marrón (#8B6538), o naranja
+     teja (#C4662B) dependiendo del edificio
+   - Paredes: beige claro (#E8D5B7), blanco hueso (#F5F0E1)
+   - Chiwiña (domo geodésico): triángulos azul-verde (#4ABFB2),
+     turquesa (#2E9E8F), verde agua (#3BBFA0)
+   - Ventanas/puertas: marrón medio (#6B4226) o gris azulado (#7B8FA1)
+3. Tengan sombra sutil (elipse gris, opacidad 20%, debajo de cada uno)
+4. Perspectiva isométrica leve uniforme (3/4 vista, todos mirando
+   hacia la misma dirección)
+5. Estilo FLAT DESIGN con colores sólidos planos, sin gradientes,
+   sin texturas fotográficas
+
+Los edificios son:
+- Ingreso (#1): pórtico/arco de entrada
+- Boleterías (#2): caseta pequeña
+- Chiwiña (#3): domo geodésico grande (el más importante)
+- Cafetería (#4): edificio rectangular, techo naranja
+- Teatro Galpón (#5): galpón alargado, techo a dos aguas
+- Escenario Principal (#8): estructura abierta con techo/tinglado
+- Anfiteatro (#9): semicírculo con graderías
+- Casitas Taypi: 3-4 casitas rústicas en zona boscosa
+- Casitas Macroregiones: casitas dispersas extremo derecho
+
+IMPORTANTE: Mantén las posiciones EXACTAS de mi mapa. Solo cambia
+el estilo visual para que sean uniformes y se integren al mapa.
+```
+
+#### Opción C: Arreglarlo a mano en GIMP/Photoshop (más control)
+Si prefieres no depender de Gemini para esto:
+
+1. **Unificar colores** — Selecciona cada edificio → Colores → Tono/Saturación:
+   - Tono: ajustar hacia naranjas/marrones cálidos
+   - Saturación: bajar a ~60-70% (los colores planos no son muy saturados)
+   - Luminosidad: ajustar para que no sea ni muy brillante ni muy oscuro
+
+2. **Agregar contornos** — Para cada edificio:
+   - Varita Mágica en el fondo → Invertir selección (ahora tienes el edificio seleccionado)
+   - Seleccionar → Crecer → 2px
+   - Crear capa NUEVA debajo del edificio
+   - Editar → Rellenar selección con marrón oscuro (#4A3728)
+   - Resultado: borde marrón consistente como en el mapa promo
+
+3. **Agregar sombras** — Para cada edificio:
+   - Duplicar la capa del edificio
+   - En la copia: Colores → Tono/Saturación → Luminosidad a -100 (todo negro)
+   - Herramienta Escalar: reducir SOLO la altura al 25-30%
+   - Mover la sombra debajo y ligeramente hacia abajo-derecha
+   - Opacidad de la capa sombra: 15-20%
+   - Filtros → Desenfocar → Desenfoque Gaussiano → 4px
+
+4. **Suavizar bases** — Con pincel suave (opacidad 30%), color del terreno
+   (#C4A882), pinta la zona donde el edificio toca el suelo
+
 ### Guardar resultado:
 - **Guarda** como `capas/03_edificios_v1.png`
 - Si pusiste cada edificio en sub-capa, también exporta `capas/03_chiwina.png`, 
@@ -334,32 +511,62 @@ Mismo estilo flat, fondo blanco, 250x200 px cada uno. Ponlos en fila.
 
 ### Prompt para Gemini (adjuntar tu mapa actual + mapa_promo):
 ```
-Te adjunto mi mapa en progreso y el mapa promocional de referencia.
+Estoy creando un mapa ilustrado por capas. Te adjunto:
+- Imagen 1: mi mapa en progreso (terreno + caminos + edificios ya puestos)
+- Imagen 2: mapa promocional de referencia (FÍJATE cómo están dibujados 
+  los árboles — son triángulos verdes simples estilizados)
 
-Genera una imagen JPG de 1400x700 con FONDO BLANCO que muestre SOLO 
-árboles y vegetación en estilo flat/ilustrado como el mapa promo.
+Necesito la CUARTA CAPA: solo árboles y vegetación.
 
-ZONA DERECHA (BOSQUE DENSO ~40% del mapa):
-- Muchos árboles tipo conífera/pino estilizados (triángulos verdes)
-- Diferentes tamaños: grandes, medianos, pequeños
-- Diferentes tonos: verde oscuro (#2D5016), verde medio (#4A7A2E), 
-  verde esmeralda (#3D8B37), verde claro (#6BAF49)
-- Deben estar agrupados densamente, superponiéndose ligeramente
-- Dejar espacios para senderos y casitas (que irán en otra capa)
+ESPECIFICACIONES TÉCNICAS:
+- Formato: imagen JPG
+- Tamaño: exactamente 1400 x 700 píxeles
+- Fondo: BLANCO PURO (#FFFFFF)
 
-ZONA IZQUIERDA (ÁRBOLES SUELTOS):
-- Algunos árboles individuales dispersos
-- Más pequeños que los del bosque
+CÓMO DEBEN VERSE LOS ÁRBOLES (copia el estilo del mapa promo):
+- Forma: triángulos simples apilados (2-3 triángulos por árbol) con 
+  un tronco fino rectangular marrón (#6B4226) abajo
+- NO realistas, NO fotográficos — son formas geométricas planas
+- Sin sombras, sin gradientes, sin detalles internos
+- Contorno fino marrón oscuro (#4A3728) opcional
 
-ZONA CENTRAL:
-- Arbustos pequeños decorativos a lo largo de caminos
-- Manchas de césped/pasto
+PALETA DE COLORES para los árboles (usar TODOS, mezclar):
+- Verde oscuro: #2D5016 (árboles del fondo/más lejanos)
+- Verde bosque: #4A7A2E (árboles medianos)
+- Verde esmeralda: #3D8B37 (árboles del frente)
+- Verde claro: #6BAF49 (árboles jóvenes/pequeños)
+- Verde azulado: #2E7D5B (variación para que no sea monótono)
 
-Estilo exactamente como el mapa promo: árboles como triángulos simples 
-con tronco fino, no realistas. Colores sólidos planos.
+DISTRIBUCIÓN EN EL MAPA:
 
-NO incluyas: edificios, caminos, terreno, texto. Solo vegetación 
-sobre fondo blanco.
+1. ZONA DERECHA — BOSQUE DENSO (~40% del ancho del mapa):
+   - Llenar densamente con árboles de diferentes tamaños
+   - Los árboles se superponen ligeramente entre sí
+   - TAMAÑOS VARIADOS: grandes (40-50px alto) en primer plano, 
+     medianos (25-35px) en medio, pequeños (15-20px) atrás
+   - DEJAR HUECOS/CLAROS donde van los senderos (mira mi mapa 
+     de progreso para ver dónde están los caminos)
+   - DEJAR HUECOS donde van las casitas de Taypi y Macroregiones
+
+2. ZONA IZQUIERDA — ÁRBOLES DISPERSOS:
+   - Solo 5-8 árboles individuales sueltos
+   - Tamaño mediano-pequeño
+   - Cerca de los bordes/perímetro del parque
+   - NO poner árboles encima de los edificios ni de la plaza
+
+3. ZONA CENTRAL — ARBUSTOS:
+   - Algunos arbustos pequeños (círculos verdes de 8-12px) a lo 
+     largo de los caminos
+   - Macetas/jardineras como rectángulos verdes pequeños
+
+IMPORTANTE: Mira mi mapa de progreso para ver dónde están los 
+edificios y caminos. NO pongas árboles encima de ellos.
+
+PROHIBIDO:
+❌ Edificios, caminos, terreno de fondo
+❌ Texto, números, íconos
+❌ Árboles con hojas detalladas o estilo realista
+❌ Sombras o gradientes en los árboles
 ```
 
 ### Tu trabajo manual después:
@@ -377,41 +584,113 @@ sobre fondo blanco.
 
 ### Prompt de refinamiento:
 ```
-Te adjunto cómo quedó mi mapa con todas las capas hasta ahora 
-(terreno + caminos + edificios + árboles). 
+Te adjunto mi mapa con todas las capas hasta ahora. La capa de 
+árboles tiene estos problemas específicos:
 
-Problemas que veo:
-- [ej: "Hay muy pocos árboles en la esquina superior derecha"]
-- [ej: "Los árboles son todos del mismo tamaño"]
+[LLENAR, ej:]
+- La esquina superior derecha tiene muy pocos árboles — necesito 
+  el doble de densidad ahí
+- Todos los árboles son del mismo tamaño (~30px) — necesito variación: 
+  grandes (50px), medianos (30px), pequeños (15px)
+- Hay árboles encima del edificio #8 (Escenario Principal) — elimínalos
+- Los árboles del lado izquierdo son demasiados — deja solo 4-5 sueltos
+- El color es muy uniforme — usa más variedad de verdes
+- Falta un claro/hueco en el bosque donde va el sendero principal
 
-Genera SOLO una nueva capa de vegetación (fondo blanco, 1400x700) 
-que corrija estos problemas. Mantén el mismo estilo y posiciones 
-que ya están bien.
+Genera una NUEVA capa de vegetación completa que:
+- CORRIJA los problemas que te indiqué
+- MANTENGA los árboles que ya están bien posicionados
+- Use el MISMO estilo (triángulos planos, flat design)
+- JPG 1400x700, fondo blanco
+```
+
+### Prompt extra — Generar árboles sueltos para copiar-pegar:
+```
+Genera una HOJA DE SPRITES de árboles estilizados para un mapa ilustrado.
+Imagen JPG de 800x400, fondo blanco.
+
+Dibuja 20 árboles sueltos organizados en 4 filas de 5, con espacio 
+entre ellos para recortar. Cada árbol debe ser diferente:
+
+Fila 1 — ÁRBOLES GRANDES (50-60px alto):
+5 árboles tipo pino/conífera, triángulos verdes, diferentes tonos 
+de verde (#2D5016, #4A7A2E, #3D8B37, #6BAF49, #2E7D5B)
+
+Fila 2 — ÁRBOLES MEDIANOS (30-40px alto):
+5 árboles más pequeños, mismos estilos pero proporcionalmente menores
+
+Fila 3 — ÁRBOLES PEQUEÑOS (15-25px alto):
+5 arbolitos para el fondo/lejanía
+
+Fila 4 — ARBUSTOS Y MATORRALES (10-15px alto):
+5 arbustos redondeados/ovalados verdes para decorar bordes de caminos
+
+Estilo: flat design, colores sólidos, tronco fino marrón, SIN sombras.
+Cada árbol bien separado del siguiente para poder recortarlos.
 ```
 
 ---
 
 ## FASE 5: CAPA DE AGUA, JUEGOS Y DETALLES
 
-### Prompt para Gemini (adjuntar tu mapa actual):
+### Prompt para Gemini (adjuntar tu mapa actual + mapa_promo):
 ```
-Te adjunto mi mapa en progreso del Parque de las Culturas.
+Estoy creando un mapa ilustrado por capas. Te adjunto:
+- Imagen 1: mi mapa en progreso (terreno + caminos + edificios + árboles)
+- Imagen 2: mapa promocional de referencia
 
-Genera una imagen JPG de 1400x700 con FONDO BLANCO que muestre SOLO 
-estos elementos de detalle:
+Necesito la QUINTA CAPA: elementos de detalle.
 
-1. AGUAS DANZANTES (#6) — fuente/piscina decorativa en la zona central, 
-   color azul agua (#4FC3F7) con efecto de ondas simples
-2. TELEFÉRICO — cable con cabinas rojas en la esquina superior izquierda 
-   (como se ve en el mapa promo, las cabinas cuelgan de un cable)
-3. APACHETA — estructura de piedras apiladas junto al mirador (arriba izquierda)
-4. ZONAS DE JUEGOS — representadas como áreas de color:
-   - Tierras Altas: zona naranja tenue arriba izquierda  
-   - Tierras Medias: zona naranja tenue centro
-   - Tierras Bajas: zona naranja tenue abajo centro
-   - Taypi: zona gris tenue centro-derecha
+ESPECIFICACIONES TÉCNICAS:
+- Formato: imagen JPG
+- Tamaño: exactamente 1400 x 700 píxeles
+- Fondo: BLANCO PURO (#FFFFFF)
 
-Estilo flat, colores suaves. Solo estos elementos sobre fondo blanco.
+ELEMENTOS A DIBUJAR (cada uno en su posición según mi mapa):
+
+1. AGUAS DANZANTES — Fuente/piscina decorativa:
+   - Posición: zona central del parque
+   - Forma: rectángulo redondeado o forma orgánica
+   - Color: azul agua (#4FC3F7) con 2-3 líneas curvas blancas 
+     adentro simulando ondas
+   - Borde: azul más oscuro (#2196F3), 2px
+   - Tamaño: aprox 80x50px
+
+2. TELEFÉRICO — Sistema de cable aéreo:
+   - Posición: esquina superior izquierda, cruzando diagonalmente
+   - Dibujar: una línea negra fina (2px) que representa el cable
+   - Colgar 3 cabinas del cable: rectángulos redondeados de 20x15px 
+     en rojo (#E74C3C) con ventanas blancas
+   - Una torre/poste en cada extremo del cable (líneas grises finas)
+
+3. APACHETA — Montículo de piedras ritual:
+   - Posición: junto al mirador (arriba izquierda)
+   - Forma: pirámide pequeña de piedras circulares apiladas
+   - Colores: grises (#888, #AAA, #CCC) alternando
+   - Tamaño: aprox 30x25px
+
+4. ZONAS DE JUEGOS — Áreas resaltadas semitransparentes:
+   - NO son objetos sólidos, son manchas de color tenue que 
+     resaltan una zona del mapa
+   - Tierras Altas: óvalo naranja tenue (#E67E22, opacidad 25%) 
+     arriba izquierda
+   - Tierras Medias: óvalo naranja tenue (#F39C12, opacidad 25%) 
+     centro del mapa
+   - Tierras Bajas: óvalo naranja claro (#F5B041, opacidad 25%) 
+     abajo centro
+   - Taypi: óvalo gris tenue (#95A5A6, opacidad 25%) centro-derecha
+   - Cada zona ~150x100px aproximadamente
+
+5. BANCAS/MOBILIARIO (opcional):
+   - Pequeños rectángulos marrones (#8B6538) de 10x5px dispersos 
+     junto a los caminos, representando bancas
+
+ESTILO: Flat design, colores sólidos, sin sombras, sin gradientes.
+
+PROHIBIDO:
+❌ Terreno, caminos, edificios, árboles
+❌ Texto, números
+❌ Elementos fuera de la silueta del parque
 ```
 
 ### Tu trabajo manual después:
@@ -427,20 +706,45 @@ Estilo flat, colores suaves. Solo estos elementos sobre fondo blanco.
 
 ### Prompt para Gemini:
 ```
-Genera un SET de íconos individuales para un mapa de parque, estilo flat 
-design, cada uno de 50x50 píxeles, todos sobre FONDO BLANCO, en una 
-cuadrícula. Los íconos son:
+Genera una imagen JPG de 700x200 píxeles con fondo BLANCO PURO.
 
-1. 🚻 Baños — símbolo hombre/mujer clásico, azul
-2. 👨‍👩‍👧 Baño Familiar — símbolo familia, azul  
-3. ♿ Acceso Discapacitados — símbolo silla de ruedas, azul
-4. ➕ Posta de Salud — cruz, rojo
-5. K Kiosco — letra K en círculo marrón
-6. P Parqueo Vehicular — letra P en cuadrado azul
-7. 🚲 Parqueo Bicicletas — bicicleta simplificada, verde
+Dibuja 7 íconos de servicios para un mapa de parque, organizados en 
+una fila horizontal con 80px de espacio entre cada uno.
 
-Cada ícono debe tener contorno definido y ser legible en tamaño pequeño.
-Ponlos todos en una sola imagen como cuadrícula para que yo los recorte.
+Cada ícono debe:
+- Ser de 50x50 píxeles exactos
+- Estar dentro de un círculo de fondo blanco con borde fino (2px)
+- Tener diseño flat/minimalista, MÁXIMO 2 colores por ícono
+- Ser reconocible incluso si se reduce a 25x25px
+
+Los 7 íconos de izquierda a derecha:
+
+1. BAÑOS: Silueta clásica hombre+mujer (el símbolo universal de WC).
+   Color: azul (#2196F3). Borde círculo: azul oscuro (#1565C0).
+
+2. BAÑO FAMILIAR: Silueta de adulto+niño juntos.
+   Color: azul (#2196F3). Borde: azul oscuro (#1565C0).
+
+3. ACCESO DISCAPACITADOS: Símbolo internacional de silla de ruedas.
+   Color: azul (#2196F3). Borde: azul oscuro (#1565C0).
+
+4. POSTA DE SALUD: Cruz médica simple (cruz griega gruesa).
+   Color: rojo (#E53935). Borde: rojo oscuro (#B71C1C).
+
+5. KIOSCO: Letra "K" grande bold centrada.
+   Color: marrón (#795548). Borde: marrón oscuro (#4E342E).
+   Fondo del círculo: crema (#FFF8E1).
+
+6. PARQUEO VEHICULAR: Letra "P" grande bold centrada.
+   Color: blanco. Fondo del círculo: azul (#1976D2).
+
+7. PARQUEO BICICLETAS: Silueta simplificada de bicicleta (2 círculos 
+   para ruedas + líneas para marco).
+   Color: verde (#388E3C). Borde: verde oscuro (#1B5E20).
+
+Sin texto debajo de los íconos. Sin sombras. Sin gradientes.
+Cada ícono bien separado y centrado en su espacio para poder 
+recortarlo fácilmente.
 ```
 
 ### Tu trabajo manual después:
@@ -461,17 +765,29 @@ Ponlos todos en una sola imagen como cuadrícula para que yo los recorte.
 
 ### Prompt para Gemini:
 ```
-Genera 11 marcadores circulares numerados del 1 al 11 para un mapa.
-Cada marcador es un círculo naranja (#E67E22) con el número en blanco 
-adentro, con borde blanco fino. Tamaño: 40x40 píxeles cada uno.
-También genera 5 marcadores más pequeños (25x25) en estos colores:
-- Naranja oscuro (#D35400)
-- Naranja medio (#E67E22)  
-- Naranja claro (#F39C12)
-- Gris claro (#95A5A6)
-- Verde (#27AE60)
+Genera una imagen JPG de 800x200 píxeles con fondo BLANCO PURO.
 
-Ponlos todos en una fila sobre fondo blanco.
+Dibuja 2 filas de marcadores circulares para un mapa:
+
+FILA 1 — MARCADORES GRANDES (40x40px cada uno, separados 20px):
+11 círculos numerados del 1 al 11.
+- Fondo de cada círculo: naranja (#E67E22)
+- Número adentro: blanco (#FFFFFF), fuente bold sans-serif, centrado
+- Borde exterior: blanco (#FFFFFF), grosor 3px
+- Los números de 2 dígitos (10, 11) deben tener fuente más pequeña 
+  para que quepan dentro del círculo
+
+FILA 2 — MARCADORES PEQUEÑOS (25x25px cada uno, separados 15px):
+5 círculos de colores SIN número adentro (solo color sólido):
+- Círculo 1: naranja oscuro (#D35400) — representa "Tierras Altas"
+- Círculo 2: naranja medio (#E67E22) — representa "Tierras Medias"
+- Círculo 3: naranja claro (#F5B041) — representa "Tierras Bajas"
+- Círculo 4: gris claro (#95A5A6) — representa "Taypi"
+- Círculo 5: verde (#27AE60) — representa "Macroregiones"
+Cada uno con borde blanco de 2px.
+
+Estilo FLAT: colores 100% sólidos, sin gradiente, sin sombra, sin brillo.
+Círculos perfectamente redondos (no ovalados).
 ```
 
 ### Tu trabajo manual:
@@ -499,23 +815,64 @@ Ponlos todos en una fila sobre fondo blanco.
 
 ### Prompt para Gemini (adjuntar mapa promo):
 ```
-Genera una imagen JPG de la leyenda del mapa, similar a la del mapa 
-promocional adjunto. Tamaño: 500x300 píxeles, fondo crema semitransparente.
+Te adjunto el mapa promocional de referencia. Fíjate en la leyenda 
+que tiene en la parte inferior izquierda — necesito algo similar.
 
-SECCIÓN 1 — LUGARES (con números naranjas):
-1 Ingreso, 2 Boleterías, 3 Chiwiña, 4 Cafetería, 5 Teatro Galpón,
-6 Aguas Danzantes, 7 Mirador, 8 Escenario Principal, 9 Anfiteatro,
-10 Parrillero, 11 Área de Picnik
+Genera una imagen JPG de 600x350 píxeles que sea la leyenda del mapa.
 
-SECCIÓN 2 — JUEGOS (con puntos de color):
-● Tierras Altas, ● Tierras Medias, ● Tierras Bajas, ● Taypi, ● Macroregiones
+DISEÑO:
+- Fondo: rectángulo redondeado color crema (#F5F0E1) con borde fino 
+  marrón (#8B6538)
+- Dividido en 3 columnas
 
-SECCIÓN 3 — SERVICIOS (con íconos simples):
-Baños, Baño Familiar, Acceso Discapacitados, Posta de Salud, Kioscos,
-Parqueo Vehicular, Parqueo Bicicletas
+COLUMNA 1 — LUGARES (título bold):
+Lista vertical con número en círculo naranja (#E67E22) + texto:
+  1  Ingreso
+  2  Boleterías
+  3  Chiwiña
+  4  Cafetería
+  5  Teatro Galpón
+  6  Aguas Danzantes
+  7  Mirador
+  8  Escenario Principal
+  9  Anfiteatro
+  10 Parrillero
+  11 Área de Picnik
 
-Fuente sans-serif, texto en español. Estilo limpio y legible.
+COLUMNA 2 — JUEGOS (título bold):
+Lista vertical con punto de color + texto:
+  ● Tierras Altas      (punto naranja oscuro #D35400)
+  ● Tierras Medias     (punto naranja #E67E22)
+  ● Tierras Bajas      (punto naranja claro #F5B041)
+  ● Taypi              (punto gris #95A5A6)
+  ● Macroregiones      (punto verde #27AE60)
+
+COLUMNA 3 — SERVICIOS (título bold):
+Lista vertical con ícono pequeño + texto:
+  🚻 Baños
+  👨‍👩‍👧 Baño Familiar
+  ♿ Acceso Discapacitados
+  ➕ Posta de Salud
+  K  Kioscos
+  🅿 Parqueo Vehicular
+  🚲 Parqueo Bicicletas
+
+TIPOGRAFÍA: sans-serif (tipo Arial/Helvetica), color texto marrón 
+oscuro (#4A3728). Títulos en bold, items en regular.
+Tamaño legible, buena separación entre items.
+
+ATENCIÓN CON LA ORTOGRAFÍA — Copia EXACTAMENTE estos textos en español:
+- "Boleterías" (con tilde en la i)
+- "Chiwiña" (con ñ)
+- "Cafetería" (con tilde en la i)
+- "Galpón" (con tilde en la o)
+- "Área" (con tilde en la A)
 ```
+
+> **NOTA IMPORTANTE**: Gemini probablemente va a equivocarse con los 
+> acentos y la ñ. Es **mucho más eficiente hacer la leyenda 100% a mano** 
+> con la herramienta Texto de GIMP/Photoshop. Usa los marcadores que 
+> generaste en la Fase 7 como referencia visual.
 
 ### Tu trabajo manual:
 1. **Honestamente, la leyenda es mejor hacerla 100% a mano** porque Gemini 
@@ -539,26 +896,59 @@ Fuente sans-serif, texto en español. Estilo limpio y legible.
 ### 9.2 Mapa interactivo con coordenadas (Leaflet.js)
 Usa este prompt en Gemini:
 ```
-Genera un archivo HTML completo con Leaflet.js que muestre un mapa 
-interactivo del Parque de las Culturas y de la Madre Tierra.
+Genera un archivo HTML completo y funcional que muestre un mapa 
+interactivo del Parque de las Culturas y de la Madre Tierra usando 
+Leaflet.js (cargado desde CDN, sin instalar nada).
 
-Características:
-1. Usa mi imagen "mapa_final.jpg" como overlay sobre OpenStreetMap
-2. Centro del mapa: [INSERTAR LAT, LON]
-3. Esquinas del overlay:
-   - Esquina NW: [lat, lon]
-   - Esquina SE: [lat, lon]
+REQUISITOS TÉCNICOS:
+- El archivo HTML debe funcionar abriéndolo directamente en el navegador
+- Cargar Leaflet.js y su CSS desde CDN (unpkg o cdnjs)
+- La imagen del mapa "mapa_final.jpg" está en la misma carpeta que el HTML
+- Diseño responsive que funcione en desktop y móvil
 
-4. Marcadores para cada punto de interés con popup:
-[PEGAR TABLA DE COORDENADAS AQUÍ]
+MAPA BASE:
+- Tile layer: OpenStreetMap estándar
+- Centro inicial: [INSERTAR LAT, LON DEL CENTRO DEL PARQUE]
+- Zoom inicial: 17 (nivel de manzana/edificio)
+- Zoom mínimo: 15, máximo: 19
 
-5. Control de capas para mostrar/ocultar:
-   - Mapa ilustrado (overlay)
-   - Puntos de interés
-   - Servicios
+OVERLAY DE IMAGEN:
+- Superponer "mapa_final.jpg" como L.imageOverlay
+- Esquinas del overlay (bounds):
+  - Esquina suroeste (SW): [LAT_SW, LON_SW]
+  - Esquina noreste (NE): [LAT_NE, LON_NE]
+- Opacidad inicial: 0.85
+- Agregar un slider HTML para controlar la opacidad del overlay (0 a 1)
 
-Genera el HTML completo que funcione abriendo el archivo directamente 
-en el navegador. La imagen mapa_final.jpg estará en la misma carpeta.
+MARCADORES — Usar L.divIcon con círculo naranja y número blanco:
+[PEGAR TU TABLA DE COORDENADAS AQUÍ, formato:]
+{ nombre: "Ingreso", lat: -XX.XXXX, lon: -XX.XXXX, numero: 1,
+  descripcion: "Entrada principal del parque" },
+{ nombre: "Boleterías", lat: -XX.XXXX, lon: -XX.XXXX, numero: 2,
+  descripcion: "Venta de boletos de ingreso" },
+[...continuar con los 11 puntos...]
+
+Cada marcador al hacer clic muestra un popup con:
+- Nombre del lugar en bold
+- Descripción corta
+- Número entre paréntesis
+
+CONTROL DE CAPAS (L.control.layers):
+- Capa base: OpenStreetMap (siempre visible)
+- Overlays checkbox:
+  ☑ Mapa ilustrado (la imagen overlay)
+  ☑ Puntos de interés (1-11)
+  ☑ Zonas de juegos
+  ☑ Servicios
+
+ESTILOS CSS INLINE (dentro del mismo HTML):
+- El control de opacidad debe estar en la esquina inferior derecha
+- Los popups con fondo blanco y bordes redondeados
+- Los marcadores (divIcon) como círculos naranjas de 30px con 
+  número blanco centrado
+
+El código debe estar limpio, comentado en español, y listo para 
+usar sin modificaciones (excepto insertar las coordenadas reales).
 ```
 
 ---
