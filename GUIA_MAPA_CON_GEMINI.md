@@ -550,203 +550,224 @@ misma perspectiva isométrica. Ponlos en fila en una sola imagen.
 ## FASE 3B: ALTERNATIVA — GEMINI DIBUJA SOBRE EL MAPA COMPLETO
 
 > **¿Por qué esta alternativa?** En la FASE 3 le pedimos a Gemini que genere 
-> SOLO la capa de edificios sobre fondo blanco. El problema es que Gemini no 
-> logra mantener las posiciones exactas — al superponer la capa generada sobre 
-> terreno+caminos, los edificios no encajan. 
+> SOLO la capa de edificios sobre fondo blanco, pero al superponer nunca encajan.
 > 
-> **La solución:** darle a Gemini el mapa completo (terreno+caminos+stickers) 
-> y pedirle que lo redibuje COMPLETO pero mejorando SOLO los edificios. Así 
-> Gemini "ve" las capas debajo y los edificios naturalmente quedan en su lugar.
-> Después tú extraes solo los edificios nuevos.
+> **La idea:** darle el mapa completo y que redibuje SOLO los edificios.
+> 
+> **⚠️ ADVERTENCIA (aprendida del intento v2):** Gemini tiende a REINTERPRETAR 
+> todo el mapa cuando le pasas la imagen completa — cambia la forma del terreno, 
+> los colores, la perspectiva, inventa elementos nuevos. El prompt de abajo es 
+> muy agresivo en prohibirle tocar las otras capas. Si aún así Gemini cambia 
+> el terreno, usa el **PLAN B MANUAL** al final de esta sección.
 
-### PASO 3B.1 — Prompt principal (adjuntar 3 imágenes)
+### PASO 3B.0 — Preparar imagen base SIN edificios
+
+Antes de usar el prompt, exporta desde GIMP/Photoshop:
+1. Abre tu archivo PSD/XCF
+2. **Oculta** la capa `03_edificios` (ojo tachado)
+3. Exporta como `base_sin_edificios.png` (1400x700)
+4. **Muestra** de nuevo la capa `03_edificios`
+5. Exporta con todo visible como `all_layers.png` (1400x700)
+
+### PASO 3B.1 — Prompt principal (adjuntar 4 imágenes)
 
 ```
-Te adjunto 3 imágenes:
+Necesito que EDITES mi mapa — NO que lo regeneres desde cero.
 
-📎 Imagen 1 — "all_layers.png": Mi mapa COMPLETO con todas las capas 
-   apiladas: terreno + caminos + los stickers de edificios/juegos 
-   posicionados encima. ESTE es el mapa real con las posiciones 
-   correctas de todo. Tamaño: 1400 x 700 píxeles.
+Te adjunto 4 imágenes:
 
-📎 Imagen 2 — "mapa_promo.jpg": Mapa promocional ilustrado del parque.
-   ESTE es el estilo visual que quiero para los edificios. Fíjate en:
-   - Los edificios tienen contornos definidos marrón oscuro
-   - Colores sólidos planos (flat design)
-   - Perspectiva isométrica leve (vista 3/4)
-   - Techos naranja cálido / marrón / terracota
-   - Paredes beige / blanco hueso
-   - La Chiwiña (#3) es un domo geodésico turquesa/azul-verde
-   - Los juegos son PEQUEÑOS comparados con los edificios
-   - Hay MUCHO espacio entre los edificios
+📎 Imagen 1 — "all_layers.png": Mi mapa ACTUAL con terreno + caminos 
+   + stickers de edificios encima. Tamaño: 1400 x 700 px.
+   ESTE MAPA ES SAGRADO. Tu resultado debe ser CASI IDÉNTICO a esta 
+   imagen. La única diferencia deben ser los edificios mejorados.
 
-📎 Imagen 3 — "03_edificios.png": Mi capa de stickers aislada 
-   (fondo blanco). Te la paso para que veas CLARAMENTE qué elementos 
-   hay y cuáles son (sin el terreno distrayendo).
+📎 Imagen 2 — "base_sin_edificios.png": El mismo mapa pero SIN 
+   edificios — solo terreno y caminos. Esto te muestra exactamente 
+   cómo se ve el fondo sobre el cual los edificios se apoyan.
+   ► El fondo de TU resultado debe verse EXACTAMENTE como esta imagen 
+   en todas las zonas donde NO hay edificios.
 
-═══════════════════════════════════════════════════════════════
-                    LO QUE NECESITO QUE HAGAS
-═══════════════════════════════════════════════════════════════
+📎 Imagen 3 — "mapa_promo.jpg": Mapa promocional del parque. SOLO 
+   usa esta imagen como referencia del ESTILO VISUAL de los edificios 
+   — contornos marrón oscuro, colores sólidos, flat design, 
+   perspectiva isométrica leve. NO copies las posiciones ni la forma 
+   del terreno de esta imagen (tiene otro contorno diferente).
 
-Genera una imagen JPG de exactamente 1400 x 700 píxeles que sea una 
-COPIA FIEL de mi mapa "all_layers.png" (Imagen 1) donde:
-
-✅ El terreno (silueta, colores, forma) queda IDÉNTICO — no lo toques
-✅ Los caminos (grises) quedan IDÉNTICOS — no los toques  
-✅ El fondo beige queda IDÉNTICO — no lo toques
-✅ Los edificios y juegos se REDIBUJAN en estilo flat design ilustrado 
-   copiando el look del mapa promo (Imagen 2)
-
-Piensa en esto como: tomas mi mapa actual y SOLO le cambias el look 
-de los edificios/juegos, dejando TODO lo demás exactamente igual.
+📎 Imagen 4 — "03_edificios.png": Mis stickers de edificios aislados 
+   (fondo blanco). Te los paso para que identifiques CLARAMENTE qué 
+   elementos son y dónde están.
 
 ═══════════════════════════════════════════════════════════════
-              REGLA ABSOLUTA: NO TOCAR LAS OTRAS CAPAS
+  ⛔ INSTRUCCIÓN MÁS IMPORTANTE DE TODAS — LEE ESTO PRIMERO ⛔
 ═══════════════════════════════════════════════════════════════
 
-🚫 NO modifiques la silueta/forma del terreno
-🚫 NO cambies los colores del terreno (marrón, verde, gris)
-🚫 NO muevas, borres ni redibujes los caminos
-🚫 NO cambies el fondo beige (#D4C9A8) que rodea el parque
-🚫 NO agregues árboles, vegetación, nubes ni decoraciones nuevas
-🚫 NO cambies la perspectiva general del mapa
+Esto es una tarea de EDICIÓN, no de CREACIÓN.
 
-Lo ÚNICO que debe cambiar entre mi all_layers.png y tu resultado son 
-los edificios/juegos — todo lo demás debe ser pixel por pixel idéntico.
+Imagina que tienes mi mapa "all_layers.png" impreso en papel. Con un 
+borrador, borras SOLO los edificios/juegos que están pegados encima. 
+El papel queda con el terreno y caminos intactos. Ahora, con lápices 
+de colores, DIBUJAS edificios nuevos en estilo flat design en los 
+MISMOS lugares donde estaban los originales.
+
+ESO es lo que quiero. El terreno, los caminos, el fondo beige, la 
+silueta del parque — TODO eso debe ser COPIADO PIXEL POR PIXEL de 
+mi all_layers.png / base_sin_edificios.png.
+
+Si yo pongo tu resultado al lado de mi all_layers.png, la ÚNICA 
+diferencia que debo ver son los edificios con mejor estilo. Si el 
+terreno cambió de color, de forma, de perspectiva, o si los caminos 
+se movieron → ESTÁ MAL.
 
 ═══════════════════════════════════════════════════════════════
-        CÓMO REDIBUJAR LOS EDIFICIOS (sobre el mapa)
+    ERRORES DE INTENTOS ANTERIORES — NO LOS REPITAS
 ═══════════════════════════════════════════════════════════════
 
-Para CADA edificio/juego que ves en mi mapa (all_layers.png), 
-redibújalo EN SU LUGAR con estas mejoras:
+❌ ERROR v1: Los edificios se generaron demasiado grandes y agrupados 
+   en el centro, sin respetar las posiciones de los stickers.
 
-POSICIÓN: EXACTAMENTE donde está ahora. No mover nada.
+❌ ERROR v2: Gemini REINTERPRETÓ todo el mapa:
+   - Cambió la FORMA del terreno (de medialuna suave a paralelogramo 
+     rectangular con bordes rectos)
+   - Cambió la PERSPECTIVA (de vista cenital a isométrica extrema con 
+     efecto 3D de "isla elevada")
+   - Oscureció todos los COLORES del terreno
+   - Cambió los CAMINOS de posición y forma
+   - INVENTÓ una piscina hexagonal gigante FUERA del parque
+   - Agregó ÁRBOLES que no estaban en mi mapa
+   - El resultado NO se parece en NADA a mi all_layers.png original
 
-TAMAÑO: Mantener el MISMO tamaño que tienen en all_layers.png. 
-Si un edificio se ve chico en mi mapa, déjalo chico. Si se ve 
-grande, déjalo grande. NO agrandes ni achiches nada — las 
-proporciones de mis stickers ya son las correctas.
+CONCLUSIÓN: Tu resultado debe ser una COPIA FIDEDIGNA de 
+all_layers.png con SOLO los edificios mejorados. Si cambias cualquier 
+otra cosa, es un error.
 
-ESTILO (copiar del mapa promo, Imagen 2):
-- Perspectiva isométrica leve (3/4, misma que en el mapa promo)
-- Contornos definidos marrón oscuro (#4A3728), grosor 2-3px
-- Techos: naranja cálido (#D4874E), marrón (#8B6538), o terracota 
-  (#C4662B)
+═══════════════════════════════════════════════════════════════
+               LO QUE NECESITO — PASO A PASO
+═══════════════════════════════════════════════════════════════
+
+Genera una imagen JPG de exactamente 1400 x 700 píxeles siguiendo 
+ESTOS PASOS EN ORDEN:
+
+PASO A — COPIAR EL FONDO:
+Copia EXACTAMENTE mi "base_sin_edificios.png" (Imagen 2). Este es 
+tu lienzo base. No modifiques NADA: ni colores, ni formas, ni 
+perspectiva. Copia pixel por pixel el terreno beige/marrón/verde, 
+los caminos grises, el fondo beige (#D4C9A8), la silueta del parque 
+con su forma de medialuna suave.
+
+PASO B — DIBUJAR EDIFICIOS ENCIMA:
+Sobre ese fondo copiado, dibuja cada edificio/juego en la MISMA 
+POSICIÓN donde aparece en "all_layers.png" (Imagen 1). Usa el 
+estilo visual del "mapa_promo.jpg" (Imagen 3):
+
+Estilo de los edificios:
+- Perspectiva isométrica LEVE (3/4, ángulo SUAVE ~20-30°)
+  ► NO perspectiva extrema, NO vista de "isla voladora", NO 3D 
+    exagerado. Mira el mapa promo: los edificios son bastante planos
+- Contornos marrón oscuro (#4A3728), 2-3px
+- Techos: naranja cálido (#D4874E), marrón (#8B6538), terracota
 - Paredes: beige (#E8D5B7), blanco hueso (#F5F0E1)
-- Chiwiña: triángulos turquesa (#4ABFB2), azul-verde (#2E9E8F)
-- Ventanas: rectángulos marrón (#6B4226)
-- Juegos/metálicos: gris (#8E8E8E) con contorno marrón
-- Colores SÓLIDOS y PLANOS — sin gradientes, sin texturas foto
+- Chiwiña: turquesa (#4ABFB2), azul-verde (#2E9E8F)
+- Colores SÓLIDOS y PLANOS — sin gradientes, sin texturas
+- Sombra sutil (elipse gris, opacidad ~20%) debajo de cada uno
 
-ACABADOS:
-- Sombra sutil debajo de cada edificio (elipse gris, opacidad ~20%)
-- Contornos limpios como los del mapa promo
-- Los edificios deben verse INTEGRADOS con el terreno debajo, 
-  no "pegados" — la base debe tener transición suave con el suelo
+Tamaño de los edificios:
+- MISMO tamaño que tienen mis stickers en all_layers.png
+- Los edificios son PEQUEÑOS respecto al terreno (mira el mapa promo)
+- Los juegos son MÁS PEQUEÑOS que los edificios
 
-═══════════════════════════════════════════════════════════════
-    LISTA DE ELEMENTOS A REDIBUJAR (los que están en mi mapa)
-═══════════════════════════════════════════════════════════════
-
-Redibuja CADA elemento que aparece como sticker en all_layers.png. 
-Mira mi Imagen 3 (stickers aislados) para identificarlos claramente:
-
-EDIFICIOS PRINCIPALES:
-- Trepa-arañas / estructura geodésica (esquina superior-izquierda)
-- Ingreso / pórtico (zona izquierda, junto al camino curvo)
-- Chiwiña / domo geodésico turquesa (centro-izquierda, es grande)
-- Cafetería (arriba del centro, entre caminos, techo marrón)
-- Teatro Galpón (centro del mapa, edificio gris largo)
-- Escenario Principal (centro-derecha, estructura con techo)
-- Anfiteatro (zona inferior-derecha, semicírculo)
-
-JUEGOS Y ATRACCIONES (mantener PEQUEÑOS):
-- Piscina / pileta azul (centro del mapa)
-- Bote / barca con flores (centro-derecha)
-- Columpios (zona derecha)
-- Carrusel / calesita (zona derecha)
-- Sube-y-baja (zona derecha)
-- Delfín rosa (zona derecha, en el bosque)
-- Juegos pequeños varios dispersos
-
-OTROS ELEMENTOS:
-- Señal posta de salud / cruz roja (centro-izquierda)
-- Torre / antena (estructura alta y delgada)
-- Aguas danzantes / fuentes (junto a la Chiwiña) 
-- Casitas de Taypi (zona bosque, derecha)
-- Casitas de Macroregiones (extremo derecho, bosque)
+PASO C — VERIFICAR:
+Antes de dar tu resultado, compara mentalmente:
+- ¿La silueta del parque es IDÉNTICA a base_sin_edificios.png? ✓
+- ¿Los caminos están en el MISMO lugar y tienen el MISMO color? ✓
+- ¿El fondo fuera del parque es beige (#D4C9A8) liso? ✓
+- ¿SOLO cambiaron los edificios? ✓
+Si alguna respuesta es NO → corrige antes de entregar.
 
 ═══════════════════════════════════════════════════════════════
-                        PROHIBIDO
+                  PROHIBIDO (REGLAS DURAS)
 ═══════════════════════════════════════════════════════════════
 
-❌ Modificar el terreno (forma, colores, silueta)
-❌ Modificar los caminos (posición, grosor, color)
-❌ Modificar el fondo beige
+❌ Cambiar la forma/silueta del parque (es medialuna, NO rectángulo)
+❌ Cambiar los colores del terreno
+❌ Mover o redibujar los caminos
+❌ Cambiar la perspectiva general (es vista CENITAL con ISO leve, 
+   NO es una isla 3D elevada)
+❌ Agregar bordes/contornos gruesos al terreno como si fuera una isla
+❌ Oscurecer los colores generales del mapa
 ❌ Agregar árboles, vegetación, nubes, texto, personas
-❌ Cambiar la perspectiva o ángulo general del mapa
-❌ Mover edificios de su posición actual en all_layers
-❌ Cambiar el tamaño de los edificios respecto a all_layers
-❌ Inventar edificios o elementos que no existan en mis stickers
-❌ Usar gradientes, texturas fotográficas o efectos 3D realistas
-❌ Agregar texto, números, etiquetas o flechas
+❌ Inventar elementos que no existen en mis stickers (como piscinas 
+   hexagonales gigantes)
+❌ Hacer los edificios más grandes que en all_layers.png
+❌ Poner elementos FUERA de la silueta del parque
 ```
 
-### PASO 3B.2 — Extraer la capa de edificios del resultado
+### PASO 3B.2 — Tu trabajo manual después
 
-Gemini te dará el mapa COMPLETO con edificios mejorados. Ahora necesitas 
-extraer SOLO los edificios como capa separada:
+1. **Compara** el resultado de Gemini con tu `all_layers.png` original:
+   - ¿El terreno se ve igual? Si no → Gemini falló, usa el PLAN B
+   - ¿Los caminos están intactos? Si no → Gemini falló, usa el PLAN B
+   - ¿Solo cambiaron los edificios? Si sí → éxito
+2. Si el resultado es bueno, úsalo directamente como tu mapa en progreso
+3. Guarda como `mapa_progreso_v3.png`
 
-**Método 1 — Diferencia de capas en GIMP (recomendado):**
-1. Abre tu `all_layers.png` original (sin edificios mejorados) como capa base
-2. Abre el resultado de Gemini como capa encima
-3. Cambia el modo de la capa superior a **"Diferencia"** (o "Grain Extract")
-4. Exporta → esto te muestra SOLO lo que cambió (los edificios nuevos)
-5. Selecciona las zonas con contenido (los edificios) → Copiar
-6. Pega en una capa nueva con fondo blanco → `03_edificios_v3.png`
+### PASO 3B.3 — Prompt de refinamiento (si el fondo se respetó pero los edificios no)
 
-**Método 2 — Recortar a mano:**
-1. Abre el resultado de Gemini
-2. Con la herramienta **Selección libre/Lazo** selecciona cada edificio
-3. Copia y pega en una nueva capa blanca (`03_edificios`)
-4. Repite con todos los edificios/juegos
-5. Exporta como `03_edificios_v3.png`
-
-**Método 3 — Usar el resultado directamente (más fácil):**
-Si el resultado de Gemini se ve bien con todo junto, puedes USARLO 
-directamente como tu mapa en progreso (en vez de separar capas). 
-Saltas a la FASE 4 y le pasas este resultado como "mapa en progreso" 
-para agregar árboles encima.
-
-> **TIP**: El Método 3 es el más práctico. Si el mapa se ve bien con 
-> los edificios integrados, no necesitas separarlos en capa aparte. 
-> Simplemente continúa construyendo encima.
-
-### PASO 3B.3 — Prompt de refinamiento
-
-Si el resultado tiene problemas puntuales:
 ```
 Te adjunto tu resultado anterior y mi mapa original (all_layers.png).
 
-Tu resultado tiene estos problemas ESPECÍFICOS:
-[LLENAR, ej:]
-- La Chiwiña perdió el color turquesa, ahora es gris — debe ser 
-  turquesa (#4ABFB2) como en el mapa promo
-- El Teatro Galpón se distorsionó — compara con all_layers, debe 
-  tener la misma orientación
-- Los caminos cambiaron de color — NO debías tocarlos, deben ser 
-  idénticos a my all_layers.png
-- Falta el carrusel que estaba en la zona derecha
-- El terreno tiene un color diferente en la zona del bosque — 
-  SOLO los edificios debían cambiar, el terreno debe ser idéntico
+BIEN HECHO: El terreno y caminos se mantuvieron iguales ✓
 
-Genera una versión corregida:
-- JPG 1400x700
-- IDÉNTICO a all_layers.png excepto los edificios
-- Corrige SOLO los problemas que te listé
-- No toques NADA del terreno ni caminos
+PERO los edificios tienen estos problemas:
+[LLENAR, ej:]
+- La Chiwiña quedó gris en vez de turquesa (#4ABFB2)
+- Falta el carrusel de la zona derecha
+- El anfiteatro se agrandó mucho
+[...]
+
+Genera una versión corregida manteniendo INTACTO el terreno y caminos.
+Solo corrige los edificios que te indiqué.
 ```
+
+---
+
+### PLAN B MANUAL — Si Gemini sigue cambiando el terreno
+
+> **Realidad:** Gemini es un modelo GENERATIVO — no sabe "copiar y pegar" 
+> partes de una imagen preservando el resto pixel por pixel. Siempre 
+> reinterpretará el mapa completo en mayor o menor medida.
+> 
+> Si después de 2-3 intentos Gemini sigue cambiando el terreno, este plan 
+> manual es más eficiente y da resultados garantizados.
+
+**Estrategia: Tomar los edificios del resultado de Gemini + pegarlos sobre tu fondo real**
+
+Los edificios que Gemini dibuja en la FASE 3B tienen buen diseño y están 
+aproximadamente bien posicionados — el problema es que TAMBIÉN cambia el 
+terreno/caminos/fondo. La solución: extraer solo los edificios del resultado 
+de Gemini y pegarlos sobre tu fondo intacto.
+
+**Método — Mezcla selectiva en GIMP/Photoshop (~15-20 min):**
+1. Abre tu `base_sin_edificios.png` como **capa inferior** (fondo intacto)
+2. Abre el resultado de Gemini (FASE 3B) como **capa superior**
+3. En la capa superior (resultado de Gemini):
+   - Agrega una **máscara de capa** (Capa → Máscara → Añadir máscara → Negro/Transparencia total)
+   - Con **Pincel blanco grande** (opacidad 100%), pinta SOLO sobre los 
+     edificios/juegos que quieras mantener → aparecerán sobre tu fondo
+   - NO pintes sobre el terreno ni caminos — así se ve tu fondo original debajo
+4. Cuando todos los edificios estén revelados, aplana la imagen
+5. Exporta como `mapa_progreso_v3.png`
+
+> **¿Por qué funciona?** Porque la máscara de capa te da control total: 
+> muestras SOLO los píxeles de los edificios de Gemini (que se ven bien) 
+> sobre tu fondo original (que está perfecto). Es como recortar stickers 
+> del resultado de Gemini y pegarlos en tu mapa.
+
+**Alternativa aún más simple — Borrador:**
+1. Pon el resultado de Gemini como capa encima de `base_sin_edificios.png`
+2. Con el **Borrador grande** (brocha suave, 100% opacidad), borra todo 
+   lo que NO sea un edificio en la capa superior
+3. Lo que queda son solo los edificios de Gemini flotando sobre tu fondo real
+4. Aplana y exporta
 
 ---
 
