@@ -547,6 +547,209 @@ misma perspectiva isométrica. Ponlos en fila en una sola imagen.
 
 ---
 
+## FASE 3B: ALTERNATIVA — GEMINI DIBUJA SOBRE EL MAPA COMPLETO
+
+> **¿Por qué esta alternativa?** En la FASE 3 le pedimos a Gemini que genere 
+> SOLO la capa de edificios sobre fondo blanco. El problema es que Gemini no 
+> logra mantener las posiciones exactas — al superponer la capa generada sobre 
+> terreno+caminos, los edificios no encajan. 
+> 
+> **La solución:** darle a Gemini el mapa completo (terreno+caminos+stickers) 
+> y pedirle que lo redibuje COMPLETO pero mejorando SOLO los edificios. Así 
+> Gemini "ve" las capas debajo y los edificios naturalmente quedan en su lugar.
+> Después tú extraes solo los edificios nuevos.
+
+### PASO 3B.1 — Prompt principal (adjuntar 3 imágenes)
+
+```
+Te adjunto 3 imágenes:
+
+📎 Imagen 1 — "all_layers.png": Mi mapa COMPLETO con todas las capas 
+   apiladas: terreno + caminos + los stickers de edificios/juegos 
+   posicionados encima. ESTE es el mapa real con las posiciones 
+   correctas de todo. Tamaño: 1400 x 700 píxeles.
+
+📎 Imagen 2 — "mapa_promo.jpg": Mapa promocional ilustrado del parque.
+   ESTE es el estilo visual que quiero para los edificios. Fíjate en:
+   - Los edificios tienen contornos definidos marrón oscuro
+   - Colores sólidos planos (flat design)
+   - Perspectiva isométrica leve (vista 3/4)
+   - Techos naranja cálido / marrón / terracota
+   - Paredes beige / blanco hueso
+   - La Chiwiña (#3) es un domo geodésico turquesa/azul-verde
+   - Los juegos son PEQUEÑOS comparados con los edificios
+   - Hay MUCHO espacio entre los edificios
+
+📎 Imagen 3 — "03_edificios.png": Mi capa de stickers aislada 
+   (fondo blanco). Te la paso para que veas CLARAMENTE qué elementos 
+   hay y cuáles son (sin el terreno distrayendo).
+
+═══════════════════════════════════════════════════════════════
+                    LO QUE NECESITO QUE HAGAS
+═══════════════════════════════════════════════════════════════
+
+Genera una imagen JPG de exactamente 1400 x 700 píxeles que sea una 
+COPIA FIEL de mi mapa "all_layers.png" (Imagen 1) donde:
+
+✅ El terreno (silueta, colores, forma) queda IDÉNTICO — no lo toques
+✅ Los caminos (grises) quedan IDÉNTICOS — no los toques  
+✅ El fondo beige queda IDÉNTICO — no lo toques
+✅ Los edificios y juegos se REDIBUJAN en estilo flat design ilustrado 
+   copiando el look del mapa promo (Imagen 2)
+
+Piensa en esto como: tomas mi mapa actual y SOLO le cambias el look 
+de los edificios/juegos, dejando TODO lo demás exactamente igual.
+
+═══════════════════════════════════════════════════════════════
+              REGLA ABSOLUTA: NO TOCAR LAS OTRAS CAPAS
+═══════════════════════════════════════════════════════════════
+
+🚫 NO modifiques la silueta/forma del terreno
+🚫 NO cambies los colores del terreno (marrón, verde, gris)
+🚫 NO muevas, borres ni redibujes los caminos
+🚫 NO cambies el fondo beige (#D4C9A8) que rodea el parque
+🚫 NO agregues árboles, vegetación, nubes ni decoraciones nuevas
+🚫 NO cambies la perspectiva general del mapa
+
+Lo ÚNICO que debe cambiar entre mi all_layers.png y tu resultado son 
+los edificios/juegos — todo lo demás debe ser pixel por pixel idéntico.
+
+═══════════════════════════════════════════════════════════════
+        CÓMO REDIBUJAR LOS EDIFICIOS (sobre el mapa)
+═══════════════════════════════════════════════════════════════
+
+Para CADA edificio/juego que ves en mi mapa (all_layers.png), 
+redibújalo EN SU LUGAR con estas mejoras:
+
+POSICIÓN: EXACTAMENTE donde está ahora. No mover nada.
+
+TAMAÑO: Mantener el MISMO tamaño que tienen en all_layers.png. 
+Si un edificio se ve chico en mi mapa, déjalo chico. Si se ve 
+grande, déjalo grande. NO agrandes ni achiches nada — las 
+proporciones de mis stickers ya son las correctas.
+
+ESTILO (copiar del mapa promo, Imagen 2):
+- Perspectiva isométrica leve (3/4, misma que en el mapa promo)
+- Contornos definidos marrón oscuro (#4A3728), grosor 2-3px
+- Techos: naranja cálido (#D4874E), marrón (#8B6538), o terracota 
+  (#C4662B)
+- Paredes: beige (#E8D5B7), blanco hueso (#F5F0E1)
+- Chiwiña: triángulos turquesa (#4ABFB2), azul-verde (#2E9E8F)
+- Ventanas: rectángulos marrón (#6B4226)
+- Juegos/metálicos: gris (#8E8E8E) con contorno marrón
+- Colores SÓLIDOS y PLANOS — sin gradientes, sin texturas foto
+
+ACABADOS:
+- Sombra sutil debajo de cada edificio (elipse gris, opacidad ~20%)
+- Contornos limpios como los del mapa promo
+- Los edificios deben verse INTEGRADOS con el terreno debajo, 
+  no "pegados" — la base debe tener transición suave con el suelo
+
+═══════════════════════════════════════════════════════════════
+    LISTA DE ELEMENTOS A REDIBUJAR (los que están en mi mapa)
+═══════════════════════════════════════════════════════════════
+
+Redibuja CADA elemento que aparece como sticker en all_layers.png. 
+Mira mi Imagen 3 (stickers aislados) para identificarlos claramente:
+
+EDIFICIOS PRINCIPALES:
+- Trepa-arañas / estructura geodésica (esquina superior-izquierda)
+- Ingreso / pórtico (zona izquierda, junto al camino curvo)
+- Chiwiña / domo geodésico turquesa (centro-izquierda, es grande)
+- Cafetería (arriba del centro, entre caminos, techo marrón)
+- Teatro Galpón (centro del mapa, edificio gris largo)
+- Escenario Principal (centro-derecha, estructura con techo)
+- Anfiteatro (zona inferior-derecha, semicírculo)
+
+JUEGOS Y ATRACCIONES (mantener PEQUEÑOS):
+- Piscina / pileta azul (centro del mapa)
+- Bote / barca con flores (centro-derecha)
+- Columpios (zona derecha)
+- Carrusel / calesita (zona derecha)
+- Sube-y-baja (zona derecha)
+- Delfín rosa (zona derecha, en el bosque)
+- Juegos pequeños varios dispersos
+
+OTROS ELEMENTOS:
+- Señal posta de salud / cruz roja (centro-izquierda)
+- Torre / antena (estructura alta y delgada)
+- Aguas danzantes / fuentes (junto a la Chiwiña) 
+- Casitas de Taypi (zona bosque, derecha)
+- Casitas de Macroregiones (extremo derecho, bosque)
+
+═══════════════════════════════════════════════════════════════
+                        PROHIBIDO
+═══════════════════════════════════════════════════════════════
+
+❌ Modificar el terreno (forma, colores, silueta)
+❌ Modificar los caminos (posición, grosor, color)
+❌ Modificar el fondo beige
+❌ Agregar árboles, vegetación, nubes, texto, personas
+❌ Cambiar la perspectiva o ángulo general del mapa
+❌ Mover edificios de su posición actual en all_layers
+❌ Cambiar el tamaño de los edificios respecto a all_layers
+❌ Inventar edificios o elementos que no existan en mis stickers
+❌ Usar gradientes, texturas fotográficas o efectos 3D realistas
+❌ Agregar texto, números, etiquetas o flechas
+```
+
+### PASO 3B.2 — Extraer la capa de edificios del resultado
+
+Gemini te dará el mapa COMPLETO con edificios mejorados. Ahora necesitas 
+extraer SOLO los edificios como capa separada:
+
+**Método 1 — Diferencia de capas en GIMP (recomendado):**
+1. Abre tu `all_layers.png` original (sin edificios mejorados) como capa base
+2. Abre el resultado de Gemini como capa encima
+3. Cambia el modo de la capa superior a **"Diferencia"** (o "Grain Extract")
+4. Exporta → esto te muestra SOLO lo que cambió (los edificios nuevos)
+5. Selecciona las zonas con contenido (los edificios) → Copiar
+6. Pega en una capa nueva con fondo blanco → `03_edificios_v3.png`
+
+**Método 2 — Recortar a mano:**
+1. Abre el resultado de Gemini
+2. Con la herramienta **Selección libre/Lazo** selecciona cada edificio
+3. Copia y pega en una nueva capa blanca (`03_edificios`)
+4. Repite con todos los edificios/juegos
+5. Exporta como `03_edificios_v3.png`
+
+**Método 3 — Usar el resultado directamente (más fácil):**
+Si el resultado de Gemini se ve bien con todo junto, puedes USARLO 
+directamente como tu mapa en progreso (en vez de separar capas). 
+Saltas a la FASE 4 y le pasas este resultado como "mapa en progreso" 
+para agregar árboles encima.
+
+> **TIP**: El Método 3 es el más práctico. Si el mapa se ve bien con 
+> los edificios integrados, no necesitas separarlos en capa aparte. 
+> Simplemente continúa construyendo encima.
+
+### PASO 3B.3 — Prompt de refinamiento
+
+Si el resultado tiene problemas puntuales:
+```
+Te adjunto tu resultado anterior y mi mapa original (all_layers.png).
+
+Tu resultado tiene estos problemas ESPECÍFICOS:
+[LLENAR, ej:]
+- La Chiwiña perdió el color turquesa, ahora es gris — debe ser 
+  turquesa (#4ABFB2) como en el mapa promo
+- El Teatro Galpón se distorsionó — compara con all_layers, debe 
+  tener la misma orientación
+- Los caminos cambiaron de color — NO debías tocarlos, deben ser 
+  idénticos a my all_layers.png
+- Falta el carrusel que estaba en la zona derecha
+- El terreno tiene un color diferente en la zona del bosque — 
+  SOLO los edificios debían cambiar, el terreno debe ser idéntico
+
+Genera una versión corregida:
+- JPG 1400x700
+- IDÉNTICO a all_layers.png excepto los edificios
+- Corrige SOLO los problemas que te listé
+- No toques NADA del terreno ni caminos
+```
+
+---
+
 ## FASE 4: CAPA DE ÁRBOLES Y VEGETACIÓN
 
 ### Prompt para Gemini (adjuntar tu mapa actual + mapa_promo):
