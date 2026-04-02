@@ -240,270 +240,223 @@ Genera una nueva versión de SOLO la capa de caminos:
 
 ## FASE 3: CAPA DE EDIFICIOS Y ESTRUCTURAS
 
-### ⚠️ El problema de los dos contornos diferentes
-La imagen promocional (mapa_promo) tiene un contorno artístico distorsionado 
-que NO coincide con la silueta real de la ortofoto satelital. Si le pasas 
-ambas imágenes a Gemini y le dices "pon los edificios en su lugar", se va 
-a confundir porque las geometrías no coinciden.
+> Ya tienes la capa de stickers (`03_edificios.png`) con los edificios y 
+> juegos posicionados sobre fondo blanco. Ahora Gemini debe REDIBUJAR toda 
+> esa capa como una ilustración cohesiva que encaje con el terreno y caminos.
 
-**La solución: separar ESTILO de POSICIÓN.**
-- Del mapa promo → Gemini solo debe copiar la **apariencia** de cada edificio
-- De tu mapa en progreso (terreno+caminos) → tú defines la **posición**
-- Genera edificios **uno por uno**, no todos juntos
+### PASO 3.1 — Generar capa de edificios integrada (prompt principal)
 
-### PASO 3.0 — Crear imagen de referencia con posiciones marcadas
-Antes de pedirle nada a Gemini, prepara una **imagen guía de posiciones**:
-
-1. Abre tu mapa en progreso (terreno + caminos) en GIMP/Photoshop
-2. Crea una capa nueva llamada `GUIA_posiciones` (temporal, no es para el mapa final)
-3. Con la herramienta **Texto** o **Pincel rojo**, marca con cruces rojas (+) 
-   y números dónde va cada edificio, comparando con la ortofoto real:
-   - Cruz roja + "1" donde va el Ingreso
-   - Cruz roja + "2" donde van las Boleterías
-   - Cruz roja + "3" donde va la Chiwiña (el edificio más grande)
-   - ... y así con los 9 edificios
-4. Exporta esta imagen guía como `capas/03_guia_posiciones.png`
-5. Oculta/borra la capa `GUIA_posiciones` después (es solo de referencia)
-
-> **¿Por qué esto ayuda?** Porque ahora tú le dices a Gemini EXACTAMENTE 
-> dónde poner cada edificio con marcas visuales sobre TU contorno correcto, 
-> en vez de que Gemini trate de adivinar la correspondencia entre dos contornos diferentes.
-
-### PASO 3.1 — Generar edificios UNO POR UNO (estrategia recomendada)
-En lugar de pedir todos los edificios en una imagen (donde Gemini se 
-confundirá con las posiciones), genera cada edificio por separado como 
-un "sticker" que tú pegas en su lugar.
-
-### Prompt para CADA edificio (adjuntar SOLO el mapa_promo como referencia de estilo):
-
-**Edificio 3 — Chiwiña (el más importante, empezar por este):**
-```
-Te adjunto un mapa ilustrado promocional de un parque. Fíjate en el 
-edificio marcado como #3 "Chiwiña" — es un domo geodésico grande con 
-techo de triángulos en colores azul-verde y turquesa.
-
-Genera SOLO ese edificio aislado, con fondo blanco, en el MISMO estilo 
-flat/ilustrado del mapa. Vista en perspectiva isométrica leve (3/4, 
-como se ve en el mapa promo). Tamaño de la imagen: 250x200 píxeles.
-
-IMPORTANTE: Solo genera el edificio como un objeto aislado, sin terreno, 
-sin suelo, sin contexto alrededor. Como un sticker recortable.
-```
-
-**Repetir con cada edificio (cambiar la descripción):**
-
-| Edificio | Descripción para el prompt | Tamaño sugerido |
-|----------|---------------------------|-----------------|
-| #1 Ingreso | Estructura de entrada/pórtico del parque, arco o portal | 150x120 px |
-| #2 Boleterías | Caseta pequeña de venta de boletos, junto al ingreso | 100x80 px |
-| #3 Chiwiña | Domo geodésico grande, techo triangulado azul-verde/turquesa | 250x200 px |
-| #4 Cafetería | Edificio rectangular, techo naranja/marrón | 180x130 px |
-| #5 Teatro Galpón | Galpón con techo a dos aguas, estructura alargada | 200x140 px |
-| #8 Escenario Principal | Estructura abierta tipo tinglado/tarima grande con techo | 220x150 px |
-| #9 Anfiteatro | Semicírculo con graderías/escalones | 200x150 px |
-| Casitas Taypi | 3-4 casitas pequeñas estilo rústico agrupadas | 200x120 px |
-| Casitas Macroregiones | 3-4 casitas dispersas, similares a Taypi | 200x120 px |
-
-### Prompt modelo (copiar y adaptar para cada edificio):
-```
-Te adjunto un mapa ilustrado promocional de un parque. Fíjate en el 
-edificio [NOMBRE Y NÚMERO] — [DESCRIPCIÓN DEL EDIFICIO].
-
-Genera SOLO ese edificio aislado, fondo blanco, mismo estilo flat/ilustrado 
-del mapa promo. Vista isométrica leve (3/4). Tamaño: [ANCHO x ALTO] píxeles.
-Contornos definidos, colores sólidos planos. Como un sticker recortable, 
-sin suelo ni contexto alrededor.
-```
-
-### PASO 3.2 — Tu trabajo manual: ARMAR EL ROMPECABEZAS
-
-Este es el paso clave donde TÚ controlas las posiciones (no Gemini):
-
-1. **Descarga** todos los edificios generados
-2. **Abre** tu archivo `mapa_parque.psd` con todas las capas anteriores
-3. **Pon la ortofoto `original.png` como capa semitransparente** (opacidad ~40%)
-   encima de todo — esta es tu referencia de dónde va cada cosa en la realidad
-4. **Para CADA edificio**:
-   a. Abre el PNG del edificio generado por Gemini
-   b. Quita el fondo blanco (Varita Mágica → Eliminar)
-   c. Copia y pega en la capa `03_edificios`
-   d. **Muévelo** (tecla M) a su posición correcta mirando la ortofoto
-   e. **Escálalo** (Herramienta Escalar) al tamaño apropiado para el mapa
-   f. Si queda mal → genera solo ese edificio de nuevo con Gemini
-5. **Oculta** la capa de la ortofoto cuando termines de posicionar
-6. **Verifica** que los edificios no tapen caminos importantes — si lo hacen, 
-   muévelos ligeramente o borra la parte que sobra
-
-> **TIP**: Pon cada edificio en su propia sub-capa dentro de `03_edificios` 
-> (en GIMP: clic derecho en la capa → "Nuevo grupo de capas" → pegar cada 
-> edificio como capa separada dentro del grupo). Así puedes mover y escalar 
-> cada uno independientemente sin afectar los demás.
-
-### PASO 3.3 — Alternativa: Generar TODOS juntos (solo si te animas)
-Si prefieres intentar generar todos en una sola imagen, usa este prompt 
-mejorado que separa claramente la referencia de estilo vs. posición:
+Adjuntar las **4 imágenes** a Gemini en este orden:
 
 ```
-Te adjunto 3 imágenes:
-1. "mapa_progreso" — mi mapa en progreso con terreno y caminos ya correctos. 
-   ESTA es la geometría/contorno correcto del parque.
-2. "guia_posiciones" — el mismo mapa pero con cruces rojas numeradas donde 
-   debe ir cada edificio.
-3. "mapa_promo" — un mapa promocional ilustrado. Este tiene otro contorno 
-   diferente (está distorsionado artísticamente), pero los EDIFICIOS tienen 
-   el estilo visual que quiero copiar.
+Te adjunto 4 imágenes de un mapa ilustrado que estoy construyendo por 
+capas. Las 4 imágenes tienen EXACTAMENTE el mismo tamaño (1400x700 px) 
+y están perfectamente alineadas entre sí:
 
-INSTRUCCIÓN CLAVE: 
-- Las POSICIONES de los edificios deben seguir la imagen "guia_posiciones" 
-  (las cruces rojas numeradas). NO uses las posiciones del mapa_promo porque 
-  su contorno es diferente.
-- El ESTILO VISUAL de cada edificio (colores, forma, perspectiva) debe 
-  copiarse del mapa_promo.
+📎 Imagen 1 — "01_terreno.png": La capa de terreno del parque. Muestra 
+   la silueta del parque con zonas de color plano (marrón arena para 
+   tierra, verdes para césped y bosque, gris para estacionamiento). 
+   Esta es la BASE del mapa y define los colores del suelo.
 
-Genera una imagen JPG de 1400x700 con FONDO BLANCO con SOLO los edificios 
-en las posiciones marcadas con cruces rojas en mi guía.
+📎 Imagen 2 — "02_caminos.png": La capa de caminos y senderos (fondo 
+   blanco, solo los caminos en gris). Los edificios NO deben tapar los 
+   caminos principales — deben quedar AL LADO de los caminos.
 
-Edificios:
-1. Cruz #1 → Ingreso/pórtico
-2. Cruz #2 → Boleterías (caseta pequeña)
-3. Cruz #3 → Chiwiña (domo geodésico, el más grande)
-4. Cruz #4 → Cafetería (techo naranja)
-5. Cruz #5 → Teatro Galpón (techo a dos aguas)
-6. Cruz #8 → Escenario Principal (tinglado grande)
-7. Cruz #9 → Anfiteatro (semicírculo con graderías)
-8. Zona marcada "Taypi" → casitas pequeñas rústicas
-9. Zona marcada "Macro" → más casitas dispersas
+📎 Imagen 3 — "03_edificios.png": Mi capa de STICKERS — edificios y 
+   juegos que yo ya posicioné a mano en sus ubicaciones correctas sobre 
+   fondo blanco. ESTA IMAGEN ES TU REFERENCIA PRINCIPAL. Cada elemento 
+   está en la posición X,Y exacta donde debe aparecer en el mapa final. 
+   Fíjate en:
+   - La POSICIÓN de cada elemento (dónde está en el lienzo)
+   - La ORIENTACIÓN y PERSPECTIVA de cada edificio
+   - QUÉ tipo de edificio/juego es cada uno (su forma general)
+   - El TAMAÑO RELATIVO entre elementos (cuáles son grandes, cuáles chicos)
 
-Estilo flat design, perspectiva isométrica leve, contornos definidos.
-NO incluyas: terreno, caminos, árboles, texto, números.
+📎 Imagen 4 — "original.png": Ortofoto aérea real tomada con drone. 
+   Úsala para verificar qué hay realmente en cada posición y confirmar 
+   la escala real de cada edificio/estructura.
+
+═══════════════════════════════════════════════════════════════
+                    LO QUE NECESITO QUE HAGAS
+═══════════════════════════════════════════════════════════════
+
+Genera UNA SOLA imagen JPG de exactamente 1400 x 700 píxeles con 
+FONDO BLANCO PURO (#FFFFFF) que contenga TODOS los edificios y juegos 
+REDIBUJADOS desde cero en estilo flat design ilustrado.
+
+REGLA FUNDAMENTAL: Cada elemento debe aparecer en la MISMA POSICIÓN 
+(coordenadas X,Y) que tiene en mi capa de stickers (Imagen 3). NO 
+muevas nada de lugar. La alineación con las otras capas es crítica.
+
+═══════════════════════════════════════════════════════════════
+                    ESTILO VISUAL OBLIGATORIO
+═══════════════════════════════════════════════════════════════
+
+PERSPECTIVA:
+- Vista isométrica leve (3/4, ángulo ~30° desde arriba)
+- TODOS los edificios deben tener la MISMA dirección de perspectiva 
+  (como si el observador estuviera arriba-izquierda mirando hacia 
+  abajo-derecha)
+- Respetar la orientación/rotación que cada edificio tiene en mi 
+  capa de stickers
+
+COLORES — Paleta unificada cálida:
+- Techos: naranja cálido (#D4874E), marrón (#8B6538), o terracota 
+  (#C4662B) según el edificio
+- Paredes: beige claro (#E8D5B7), blanco hueso (#F5F0E1), o crema 
+  (#F2E8D5)
+- Contornos de CADA edificio: línea marrón oscuro (#4A3728), grosor 
+  consistente 2-3 píxeles alrededor de todo el perímetro
+- Ventanas: rectángulos marrón medio (#6B4226) o gris azulado (#7B8FA1)
+- Puertas: rectángulos marrón oscuro (#5C3A1E)
+- Estructuras metálicas/juegos: gris (#8E8E8E) con contorno (#4A3728)
+- Chiwiña (domo geodésico): triángulos azul-verde (#4ABFB2), turquesa 
+  (#2E9E8F), verde agua (#3BBFA0) — es el edificio más llamativo
+
+ACABADOS para que se integren con el mapa:
+- Cada edificio debe tener una SOMBRA sutil: elipse gris oscuro 
+  semi-transparente (opacidad ~20%) proyectada hacia abajo-derecha, 
+  ligeramente más grande que la base del edificio
+- En la BASE de cada edificio, una transición suave: NO debe haber 
+  un corte recto entre el edificio y el fondo blanco. Agrega una 
+  línea de color terroso suave (#C4A882, opacidad 40%) en la base 
+  que simule el contacto con el suelo
+- Los colores deben ser SÓLIDOS y PLANOS, sin gradientes, sin texturas
+  fotográficas, sin brillos ni reflejos
+
+═══════════════════════════════════════════════════════════════
+              TAMAÑOS IDEALES PARA CADA ELEMENTO
+═══════════════════════════════════════════════════════════════
+
+Respeta las proporciones de la ortofoto real (Imagen 4) para decidir 
+el tamaño de cada elemento. Usa estos rangos como guía:
+
+EDIFICIOS GRANDES (los que se ven claramente en la ortofoto):
+- Chiwiña (domo geodésico): ~80-100px de ancho. Es el edificio más 
+  icónico, debe verse prominente
+- Teatro Galpón (nave alargada, techo a dos aguas): ~90-110px de 
+  ancho, alargado horizontalmente
+- Cafetería (edificio rectangular, techo naranja/marrón): ~70-90px 
+  de ancho
+- Escenario Principal (estructura abierta con techo/tinglado): 
+  ~80-100px de ancho
+
+EDIFICIOS MEDIANOS:
+- Ingreso/pórtico de entrada: ~50-65px de ancho
+- Boleterías (caseta de tickets al lado del ingreso): ~35-45px
+- Anfiteatro (semicírculo con graderías): ~60-80px de ancho
+
+JUEGOS Y ESTRUCTURAS PEQUEÑAS:
+- Columpios, toboganes, carrusel, sube-y-baja: ~25-40px cada uno
+- Deben verse como íconos flat, reconocibles pero no demasiado 
+  detallados
+- Casitas de Taypi / Macroregiones: ~30-45px cada casita
+
+REGLA DE ESCALA: Ningún juego debe ser más grande que un edificio 
+mediano. La Chiwiña y el Teatro Galpón deben ser los elementos más 
+grandes de toda la capa.
+
+═══════════════════════════════════════════════════════════════
+             LISTA DE ELEMENTOS A REDIBUJAR
+═══════════════════════════════════════════════════════════════
+
+Redibuja TODOS estos elementos que aparecen en mi capa de stickers, 
+cada uno en su posición exacta:
+
+EDIFICIOS:
+1. Ingreso — pórtico/arco de entrada al parque
+2. Boleterías — caseta pequeña junto al ingreso
+3. Chiwiña — domo geodésico grande (triángulos azul-verde/turquesa)
+4. Cafetería — edificio rectangular, techo naranja-marrón
+5. Teatro Galpón — nave alargada con techo a dos aguas
+6. Escenario Principal — estructura abierta con techo tipo tinglado
+7. Anfiteatro — semicírculo con graderías escalonadas
+
+JUEGOS Y ATRACCIONES (dibujar como íconos flat sencillos):
+- Bote decorativo / barca con flores
+- Piscina / pileta (rectángulo azul con borde)
+- Columpios (estructura con asientos colgantes)
+- Tobogán (rampa curva con escalera)
+- Carrusel / calesita (estructura circular con techo cónico)
+- Sube-y-baja (tabla sobre pivote)
+- Rueda de ejercicio / juego circular
+- Delfín rosa (escultura decorativa)
+- Fuente o elemento de agua
+
+CASITAS / CABAÑAS:
+- Casitas Taypi — 3-4 casitas rústicas pequeñas agrupadas
+- Casitas Macroregiones — casitas dispersas en zona derecha
+- Torre/antena (estructura vertical delgada)
+
+═══════════════════════════════════════════════════════════════
+                        PROHIBIDO
+═══════════════════════════════════════════════════════════════
+
+❌ Terreno, césped, tierra, colores de fondo (SOLO fondo blanco)
+❌ Caminos, senderos, calles
+❌ Árboles, arbustos, vegetación de cualquier tipo
+❌ Texto, números, etiquetas, nombres
+❌ Personas, animales reales, vehículos
+❌ Nubes, sol, cielo, decoraciones externas
+❌ Flechas, líneas guía, marcos
+❌ Elementos que no estén en mi capa de stickers
+❌ Mover elementos de su posición original
+❌ Gradientes, texturas fotográficas, efectos 3D realistas
 ```
 
-> **NOTA**: Este enfoque "todo junto" es más rápido pero Gemini probablemente 
-> meterá la pata con varias posiciones. Vas a tener que recortar y mover 
-> edificios igual que en el PASO 3.2. La ventaja del enfoque "uno por uno" 
-> es que cada edificio sale mejor y tú controlas 100% la posición.
+### PASO 3.2 — Tu trabajo manual después
 
-### PASO 3.4 — Si un edificio queda feo, pide variantes
+1. **Descarga** la imagen generada por Gemini
+2. **Superponla** sobre tus capas de terreno + caminos en GIMP/Photoshop
+3. **Verifica alineación**: ¿Cada edificio cayó en la posición correcta?
+   - Si alguno se movió → usa Herramienta Mover (M) para reposicionar
+   - Si alguno cambió de tamaño → usa Escalar para ajustar
+4. **Verifica que no tape caminos importantes**:
+   - Pon la capa de caminos encima con opacidad 50% para verificar
+   - Si un edificio tapa un camino principal, muévelo ligeramente
+5. **Compara con la ortofoto**: ¿Los edificios están donde están en la realidad?
+6. **Guarda** como `03_edificios_v2.png`
+
+### PASO 3.3 — Prompt de refinamiento (si algo salió mal)
+
+Adjuntar la imagen generada + las 4 originales:
 ```
-El edificio "Chiwiña" que generaste no se parece al del mapa promo. 
-Te adjunto nuevamente SOLO la sección del mapa promo donde aparece ese 
-edificio (recorté solo esa parte).
+Te adjunto la capa de edificios que generaste y también mis 4 capas 
+originales de referencia.
 
-Genera 3 variantes diferentes del domo geodésico Chiwiña:
-- Variante A: más redondeado
-- Variante B: más angular/geométrico  
-- Variante C: más similar al del mapa promo
+La capa de edificios generada tiene estos problemas:
+[LLENAR con lo que veas mal, ej:]
+- La Chiwiña quedó demasiado pequeña, debe ser ~90px de ancho
+- El Teatro Galpón se movió 50px a la derecha de donde estaba en 
+  mis stickers — regresalo a su posición original
+- Los juegos (columpios, tobogán) quedaron más grandes que los 
+  edificios — deben ser la MITAD del tamaño
+- La cafetería no tiene contorno marrón como los demás edificios
+- Falta la piscina/pileta que sí estaba en mi capa de stickers
+- La sombra del anfiteatro va hacia la izquierda pero las demás 
+  van hacia la derecha — unificar dirección de sombras
 
-Mismo estilo flat, fondo blanco, 250x200 px cada uno. Ponlos en fila.
-```
-
-### PASO 3.5 — Integrar edificios al mapa (que no se vean "pegados")
-
-Los edificios generados por Gemini probablemente se ven "pegados" sobre 
-el mapa — no combinan con el terreno/caminos. Hay dos caminos: arreglarlo 
-a mano o pedirle a Gemini que los redibuje integrados.
-
-#### Opción A: Prompt para Gemini — Redibujar edificio integrado al mapa
-Adjunta tu mapa en progreso CON el edificio ya posicionado:
-```
-Te adjunto mi mapa en progreso del Parque de las Culturas. Ya tengo los
-edificios posicionados en su lugar correcto, pero se ven "pegados" y no
-se integran con el estilo del terreno y caminos.
-
-Necesito que REDIBUJES SOLO el edificio [NOMBRE] (el que está en [POSICIÓN])
-manteniendo EXACTAMENTE la misma posición y tamaño, pero:
-
-1. Adapta su paleta de colores a estos tonos del mapa:
-   - Techos: naranja cálido (#D4874E) o marrón (#8B6538)
-   - Paredes: beige (#E8D5B7) o blanco hueso (#F5F0E1)
-   - Domo geodésico (Chiwiña): azul-verde (#4ABFB2) y turquesa (#2E9E8F)
-   - Contornos: marrón oscuro (#4A3728), grosor 2-3px
-
-2. Agrega un contorno marrón oscuro (#4A3728) alrededor del edificio,
-   consistente con el estilo flat design del mapa promo.
-
-3. Agrega una sombra sutil: una elipse gris oscuro semi-transparente
-   debajo y ligeramente detrás del edificio (como si el sol viniera
-   del noroeste).
-
-4. En la base del edificio, haz una transición suave con el color del
-   terreno que hay debajo — no debe haber un corte recto entre edificio
-   y suelo.
-
-Genera la imagen completa de 1400x700 con FONDO BLANCO mostrando SOLO
-ese edificio redibujado (para que yo lo pegue en mi mapa).
+Genera una nueva versión corregida:
+- JPG 1400x700, fondo blanco
+- Mantén TODO lo que está bien
+- Corrige SOLO los problemas listados arriba
+- Misma paleta de colores y estilo flat
 ```
 
-#### Opción B: Prompt para Gemini — Integrar TODOS los edificios de golpe
-Si prefieres hacer todos a la vez, adjunta tu mapa completo en progreso:
+### PASO 3.4 — Si un edificio específico queda feo, pide variantes
 ```
-Te adjunto mi mapa en progreso del Parque de las Culturas con terreno,
-caminos y edificios. Los edificios están en las posiciones correctas pero
-NO se integran bien con el estilo del mapa — se ven "pegados".
+El edificio [NOMBRE] de mi capa no quedó bien. Te adjunto un recorte 
+de cómo se ve en mi capa de stickers original Y cómo quedó en tu 
+versión.
 
-Necesito que generes una nueva versión de SOLO la capa de edificios
-(imagen JPG 1400x700, fondo blanco) donde TODOS los edificios:
+Genera 3 variantes de SOLO ese edificio aislado (fondo blanco):
+- Variante A: más fiel a mi sticker original
+- Variante B: más simplificado/flat  
+- Variante C: intermedio con más detalle en el techo
 
-1. Estén en las MISMAS posiciones y tamaños que en mi mapa actual
-2. Tengan esta paleta de colores unificada:
-   - Contornos: marrón oscuro (#4A3728), grosor consistente 2-3px
-   - Techos: naranja cálido (#D4874E), marrón (#8B6538), o naranja
-     teja (#C4662B) dependiendo del edificio
-   - Paredes: beige claro (#E8D5B7), blanco hueso (#F5F0E1)
-   - Chiwiña (domo geodésico): triángulos azul-verde (#4ABFB2),
-     turquesa (#2E9E8F), verde agua (#3BBFA0)
-   - Ventanas/puertas: marrón medio (#6B4226) o gris azulado (#7B8FA1)
-3. Tengan sombra sutil (elipse gris, opacidad 20%, debajo de cada uno)
-4. Perspectiva isométrica leve uniforme (3/4 vista, todos mirando
-   hacia la misma dirección)
-5. Estilo FLAT DESIGN con colores sólidos planos, sin gradientes,
-   sin texturas fotográficas
-
-Los edificios son:
-- Ingreso (#1): pórtico/arco de entrada
-- Boleterías (#2): caseta pequeña
-- Chiwiña (#3): domo geodésico grande (el más importante)
-- Cafetería (#4): edificio rectangular, techo naranja
-- Teatro Galpón (#5): galpón alargado, techo a dos aguas
-- Escenario Principal (#8): estructura abierta con techo/tinglado
-- Anfiteatro (#9): semicírculo con graderías
-- Casitas Taypi: 3-4 casitas rústicas en zona boscosa
-- Casitas Macroregiones: casitas dispersas extremo derecho
-
-IMPORTANTE: Mantén las posiciones EXACTAS de mi mapa. Solo cambia
-el estilo visual para que sean uniformes y se integren al mapa.
+Tamaño: [ANCHO x ALTO] px. Estilo flat, contorno marrón (#4A3728), 
+misma perspectiva isométrica. Ponlos en fila en una sola imagen.
 ```
-
-#### Opción C: Arreglarlo a mano en GIMP/Photoshop (más control)
-Si prefieres no depender de Gemini para esto:
-
-1. **Unificar colores** — Selecciona cada edificio → Colores → Tono/Saturación:
-   - Tono: ajustar hacia naranjas/marrones cálidos
-   - Saturación: bajar a ~60-70% (los colores planos no son muy saturados)
-   - Luminosidad: ajustar para que no sea ni muy brillante ni muy oscuro
-
-2. **Agregar contornos** — Para cada edificio:
-   - Varita Mágica en el fondo → Invertir selección (ahora tienes el edificio seleccionado)
-   - Seleccionar → Crecer → 2px
-   - Crear capa NUEVA debajo del edificio
-   - Editar → Rellenar selección con marrón oscuro (#4A3728)
-   - Resultado: borde marrón consistente como en el mapa promo
-
-3. **Agregar sombras** — Para cada edificio:
-   - Duplicar la capa del edificio
-   - En la copia: Colores → Tono/Saturación → Luminosidad a -100 (todo negro)
-   - Herramienta Escalar: reducir SOLO la altura al 25-30%
-   - Mover la sombra debajo y ligeramente hacia abajo-derecha
-   - Opacidad de la capa sombra: 15-20%
-   - Filtros → Desenfocar → Desenfoque Gaussiano → 4px
-
-4. **Suavizar bases** — Con pincel suave (opacidad 30%), color del terreno
-   (#C4A882), pinta la zona donde el edificio toca el suelo
-
-### Guardar resultado:
-- **Guarda** como `capas/03_edificios_v1.png`
-- Si pusiste cada edificio en sub-capa, también exporta `capas/03_chiwina.png`, 
-  `capas/03_cafeteria.png`, etc. por si necesitas regenerar uno solo
 
 ---
 
