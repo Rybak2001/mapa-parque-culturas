@@ -166,57 +166,167 @@ Genera una versión mejorada de SOLO la capa de caminos (fondo blanco,
 
 ## FASE 3: CAPA DE EDIFICIOS Y ESTRUCTURAS
 
-### Prompt para Gemini (adjuntar tu mapa actual + mapa_promo):
+### ⚠️ El problema de los dos contornos diferentes
+La imagen promocional (mapa_promo) tiene un contorno artístico distorsionado 
+que NO coincide con la silueta real de la ortofoto satelital. Si le pasas 
+ambas imágenes a Gemini y le dices "pon los edificios en su lugar", se va 
+a confundir porque las geometrías no coinciden.
+
+**La solución: separar ESTILO de POSICIÓN.**
+- Del mapa promo → Gemini solo debe copiar la **apariencia** de cada edificio
+- De tu mapa en progreso (terreno+caminos) → tú defines la **posición**
+- Genera edificios **uno por uno**, no todos juntos
+
+### PASO 3.0 — Crear imagen de referencia con posiciones marcadas
+Antes de pedirle nada a Gemini, prepara una **imagen guía de posiciones**:
+
+1. Abre tu mapa en progreso (terreno + caminos) en GIMP/Photoshop
+2. Crea una capa nueva llamada `GUIA_posiciones` (temporal, no es para el mapa final)
+3. Con la herramienta **Texto** o **Pincel rojo**, marca con cruces rojas (+) 
+   y números dónde va cada edificio, comparando con la ortofoto real:
+   - Cruz roja + "1" donde va el Ingreso
+   - Cruz roja + "2" donde van las Boleterías
+   - Cruz roja + "3" donde va la Chiwiña (el edificio más grande)
+   - ... y así con los 9 edificios
+4. Exporta esta imagen guía como `capas/03_guia_posiciones.png`
+5. Oculta/borra la capa `GUIA_posiciones` después (es solo de referencia)
+
+> **¿Por qué esto ayuda?** Porque ahora tú le dices a Gemini EXACTAMENTE 
+> dónde poner cada edificio con marcas visuales sobre TU contorno correcto, 
+> en vez de que Gemini trate de adivinar la correspondencia entre dos contornos diferentes.
+
+### PASO 3.1 — Generar edificios UNO POR UNO (estrategia recomendada)
+En lugar de pedir todos los edificios en una imagen (donde Gemini se 
+confundirá con las posiciones), genera cada edificio por separado como 
+un "sticker" que tú pegas en su lugar.
+
+### Prompt para CADA edificio (adjuntar SOLO el mapa_promo como referencia de estilo):
+
+**Edificio 3 — Chiwiña (el más importante, empezar por este):**
 ```
-Te adjunto mi mapa en progreso (terreno + caminos) y el mapa promocional 
-de referencia del Parque de las Culturas.
+Te adjunto un mapa ilustrado promocional de un parque. Fíjate en el 
+edificio marcado como #3 "Chiwiña" — es un domo geodésico grande con 
+techo de triángulos en colores azul-verde y turquesa.
 
-Genera una imagen JPG de 1400x700 con FONDO BLANCO que muestre SOLO los 
-edificios y estructuras del parque, en estilo flat/ilustrado como el mapa 
-promo. Cada edificio debe estar en la posición correcta según mi mapa.
+Genera SOLO ese edificio aislado, con fondo blanco, en el MISMO estilo 
+flat/ilustrado del mapa. Vista en perspectiva isométrica leve (3/4, 
+como se ve en el mapa promo). Tamaño de la imagen: 250x200 píxeles.
 
-Edificios a incluir (con su estilo del mapa promo):
-1. Chiwiña (#3) — el domo geodésico grande, techo triangulado azul-verde/turquesa
-2. Cafetería (#4) — edificio rectangular, techo naranja/marrón
-3. Teatro Galpón (#5) — galpón con techo a dos aguas, junto a cafetería
-4. Escenario Principal (#8) — estructura abierta tipo tinglado grande
-5. Anfiteatro (#9) — semicírculo/graderías, parte inferior derecha
-6. Boleterías (#2) — caseta pequeña junto al ingreso
-7. Casitas zona Taypi — varias casitas pequeñas estilo rústico en la zona del bosque
-8. Casitas zona Macroregiones — más casitas dispersas en el extremo derecho
-9. Estructura del Ingreso (#1) — entrada/pórtico del parque
-
-Estilo: flat design, contornos definidos, colores sólidos del mapa promo.
-Vista: perspectiva isométrica leve (como se ve en el mapa promo, los 
-edificios se ven ligeramente en 3/4, no solo desde arriba).
-
-NO incluyas: terreno, caminos, árboles, texto, números. 
-Solo edificios sobre fondo blanco.
+IMPORTANTE: Solo genera el edificio como un objeto aislado, sin terreno, 
+sin suelo, sin contexto alrededor. Como un sticker recortable.
 ```
 
-### Tu trabajo manual después:
-1. **Quita el fondo blanco** (Varita Mágica → Eliminar)
-2. **Recorta cada edificio por separado** si es posible:
-   - Selecciona un edificio → Cortar → Pegar como nueva capa
-   - Así puedes mover cada edificio individualmente
-3. **Posiciona cada edificio** comparando con la ortofoto:
-   - Pon la ortofoto como capa semi-transparente de referencia
-   - Arrastra cada edificio a su posición correcta
-4. **Escala** edificios que estén muy grandes o pequeños (Herramienta Escalar)
-5. **Redibuja** partes que Gemini haya hecho mal:
-   - Usa el Pincel para corregir contornos
-   - Usa el Bote de pintura para corregir colores
-6. Si un edificio quedó muy mal, **genera solo ese edificio** con Gemini:
+**Repetir con cada edificio (cambiar la descripción):**
 
-### Prompt para un edificio individual:
+| Edificio | Descripción para el prompt | Tamaño sugerido |
+|----------|---------------------------|-----------------|
+| #1 Ingreso | Estructura de entrada/pórtico del parque, arco o portal | 150x120 px |
+| #2 Boleterías | Caseta pequeña de venta de boletos, junto al ingreso | 100x80 px |
+| #3 Chiwiña | Domo geodésico grande, techo triangulado azul-verde/turquesa | 250x200 px |
+| #4 Cafetería | Edificio rectangular, techo naranja/marrón | 180x130 px |
+| #5 Teatro Galpón | Galpón con techo a dos aguas, estructura alargada | 200x140 px |
+| #8 Escenario Principal | Estructura abierta tipo tinglado/tarima grande con techo | 220x150 px |
+| #9 Anfiteatro | Semicírculo con graderías/escalones | 200x150 px |
+| Casitas Taypi | 3-4 casitas pequeñas estilo rústico agrupadas | 200x120 px |
+| Casitas Macroregiones | 3-4 casitas dispersas, similares a Taypi | 200x120 px |
+
+### Prompt modelo (copiar y adaptar para cada edificio):
 ```
-Genera SOLO el edificio "Chiwiña" del parque — es un domo geodésico grande 
-con techo de triángulos en colores azul-verde y turquesa. Vista en perspectiva 
-isométrica leve. Estilo flat design. Fondo blanco. Tamaño: 200x150 píxeles.
-Usa como referencia el edificio #3 del mapa promocional adjunto.
+Te adjunto un mapa ilustrado promocional de un parque. Fíjate en el 
+edificio [NOMBRE Y NÚMERO] — [DESCRIPCIÓN DEL EDIFICIO].
+
+Genera SOLO ese edificio aislado, fondo blanco, mismo estilo flat/ilustrado 
+del mapa promo. Vista isométrica leve (3/4). Tamaño: [ANCHO x ALTO] píxeles.
+Contornos definidos, colores sólidos planos. Como un sticker recortable, 
+sin suelo ni contexto alrededor.
 ```
 
-7. **Guarda** como `capas/03_edificios_v1.png`
+### PASO 3.2 — Tu trabajo manual: ARMAR EL ROMPECABEZAS
+
+Este es el paso clave donde TÚ controlas las posiciones (no Gemini):
+
+1. **Descarga** todos los edificios generados
+2. **Abre** tu archivo `mapa_parque.psd` con todas las capas anteriores
+3. **Pon la ortofoto `original.png` como capa semitransparente** (opacidad ~40%)
+   encima de todo — esta es tu referencia de dónde va cada cosa en la realidad
+4. **Para CADA edificio**:
+   a. Abre el PNG del edificio generado por Gemini
+   b. Quita el fondo blanco (Varita Mágica → Eliminar)
+   c. Copia y pega en la capa `03_edificios`
+   d. **Muévelo** (tecla M) a su posición correcta mirando la ortofoto
+   e. **Escálalo** (Herramienta Escalar) al tamaño apropiado para el mapa
+   f. Si queda mal → genera solo ese edificio de nuevo con Gemini
+5. **Oculta** la capa de la ortofoto cuando termines de posicionar
+6. **Verifica** que los edificios no tapen caminos importantes — si lo hacen, 
+   muévelos ligeramente o borra la parte que sobra
+
+> **TIP**: Pon cada edificio en su propia sub-capa dentro de `03_edificios` 
+> (en GIMP: clic derecho en la capa → "Nuevo grupo de capas" → pegar cada 
+> edificio como capa separada dentro del grupo). Así puedes mover y escalar 
+> cada uno independientemente sin afectar los demás.
+
+### PASO 3.3 — Alternativa: Generar TODOS juntos (solo si te animas)
+Si prefieres intentar generar todos en una sola imagen, usa este prompt 
+mejorado que separa claramente la referencia de estilo vs. posición:
+
+```
+Te adjunto 3 imágenes:
+1. "mapa_progreso" — mi mapa en progreso con terreno y caminos ya correctos. 
+   ESTA es la geometría/contorno correcto del parque.
+2. "guia_posiciones" — el mismo mapa pero con cruces rojas numeradas donde 
+   debe ir cada edificio.
+3. "mapa_promo" — un mapa promocional ilustrado. Este tiene otro contorno 
+   diferente (está distorsionado artísticamente), pero los EDIFICIOS tienen 
+   el estilo visual que quiero copiar.
+
+INSTRUCCIÓN CLAVE: 
+- Las POSICIONES de los edificios deben seguir la imagen "guia_posiciones" 
+  (las cruces rojas numeradas). NO uses las posiciones del mapa_promo porque 
+  su contorno es diferente.
+- El ESTILO VISUAL de cada edificio (colores, forma, perspectiva) debe 
+  copiarse del mapa_promo.
+
+Genera una imagen JPG de 1400x700 con FONDO BLANCO con SOLO los edificios 
+en las posiciones marcadas con cruces rojas en mi guía.
+
+Edificios:
+1. Cruz #1 → Ingreso/pórtico
+2. Cruz #2 → Boleterías (caseta pequeña)
+3. Cruz #3 → Chiwiña (domo geodésico, el más grande)
+4. Cruz #4 → Cafetería (techo naranja)
+5. Cruz #5 → Teatro Galpón (techo a dos aguas)
+6. Cruz #8 → Escenario Principal (tinglado grande)
+7. Cruz #9 → Anfiteatro (semicírculo con graderías)
+8. Zona marcada "Taypi" → casitas pequeñas rústicas
+9. Zona marcada "Macro" → más casitas dispersas
+
+Estilo flat design, perspectiva isométrica leve, contornos definidos.
+NO incluyas: terreno, caminos, árboles, texto, números.
+```
+
+> **NOTA**: Este enfoque "todo junto" es más rápido pero Gemini probablemente 
+> meterá la pata con varias posiciones. Vas a tener que recortar y mover 
+> edificios igual que en el PASO 3.2. La ventaja del enfoque "uno por uno" 
+> es que cada edificio sale mejor y tú controlas 100% la posición.
+
+### PASO 3.4 — Si un edificio queda feo, pide variantes
+```
+El edificio "Chiwiña" que generaste no se parece al del mapa promo. 
+Te adjunto nuevamente SOLO la sección del mapa promo donde aparece ese 
+edificio (recorté solo esa parte).
+
+Genera 3 variantes diferentes del domo geodésico Chiwiña:
+- Variante A: más redondeado
+- Variante B: más angular/geométrico  
+- Variante C: más similar al del mapa promo
+
+Mismo estilo flat, fondo blanco, 250x200 px cada uno. Ponlos en fila.
+```
+
+### Guardar resultado:
+- **Guarda** como `capas/03_edificios_v1.png`
+- Si pusiste cada edificio en sub-capa, también exporta `capas/03_chiwina.png`, 
+  `capas/03_cafeteria.png`, etc. por si necesitas regenerar uno solo
 
 ---
 
