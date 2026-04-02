@@ -241,167 +241,254 @@ Genera una nueva versión de SOLO la capa de caminos:
 ## FASE 3: CAPA DE EDIFICIOS Y ESTRUCTURAS
 
 > Ya tienes la capa de stickers (`03_edificios.png`) con los edificios y 
-> juegos posicionados sobre fondo blanco. Ahora Gemini debe REDIBUJAR toda 
-> esa capa como una ilustración cohesiva que encaje con el terreno y caminos.
+> juegos posicionados sobre fondo blanco. Antes de usar el prompt, exporta 
+> una imagen con TODAS las capas visibles apiladas (terreno+caminos+stickers) 
+> y guárdala como `all_layers.png`. Gemini necesita ver cómo se ven los 
+> stickers en contexto sobre el mapa para respetar las posiciones exactas.
 
 ### PASO 3.1 — Generar capa de edificios integrada (prompt principal)
 
-Adjuntar las **4 imágenes** a Gemini en este orden:
+Adjuntar **5 imágenes** a Gemini en este orden:
 
 ```
-Te adjunto 4 imágenes de un mapa ilustrado que estoy construyendo por 
-capas. Las 4 imágenes tienen EXACTAMENTE el mismo tamaño (1400x700 px) 
-y están perfectamente alineadas entre sí:
+Estoy construyendo un mapa ilustrado del Parque de las Culturas por 
+capas transparentes que se apilan una sobre otra. Te adjunto 5 imágenes. 
+TODAS tienen exactamente 1400 x 700 píxeles y están PERFECTAMENTE 
+ALINEADAS entre sí — pixel por pixel. Tu resultado DEBE mantener esa 
+alineación exacta.
 
-📎 Imagen 1 — "01_terreno.png": La capa de terreno del parque. Muestra 
-   la silueta del parque con zonas de color plano (marrón arena para 
-   tierra, verdes para césped y bosque, gris para estacionamiento). 
-   Esta es la BASE del mapa y define los colores del suelo.
+═══════════════════════════════════════════════════════════════
+                    LAS 5 IMÁGENES DE REFERENCIA
+═══════════════════════════════════════════════════════════════
 
-📎 Imagen 2 — "02_caminos.png": La capa de caminos y senderos (fondo 
-   blanco, solo los caminos en gris). Los edificios NO deben tapar los 
-   caminos principales — deben quedar AL LADO de los caminos.
+📎 Imagen 1 — "all_layers.png": REFERENCIA PRINCIPAL DE POSICIÓN.
+   Esta imagen muestra TODAS las capas apiladas: terreno + caminos + 
+   los stickers de edificios encima. Fíjate que cada edificio/juego 
+   está posicionado EXACTAMENTE donde debe aparecer en el mapa final.
+   ► USA ESTA IMAGEN para determinar la posición X,Y de cada elemento.
+   ► Si un edificio aparece en la esquina superior-izquierda sobre el 
+     terreno marrón, tu edificio redibujado DEBE caer en ese mismo 
+     punto exacto del lienzo de 1400x700.
 
-📎 Imagen 3 — "03_edificios.png": Mi capa de STICKERS — edificios y 
-   juegos que yo ya posicioné a mano en sus ubicaciones correctas sobre 
-   fondo blanco. ESTA IMAGEN ES TU REFERENCIA PRINCIPAL. Cada elemento 
-   está en la posición X,Y exacta donde debe aparecer en el mapa final. 
-   Fíjate en:
-   - La POSICIÓN de cada elemento (dónde está en el lienzo)
-   - La ORIENTACIÓN y PERSPECTIVA de cada edificio
-   - QUÉ tipo de edificio/juego es cada uno (su forma general)
-   - El TAMAÑO RELATIVO entre elementos (cuáles son grandes, cuáles chicos)
+📎 Imagen 2 — "03_edificios.png": La capa de STICKERS AISLADA 
+   (fondo blanco). Muestra los mismos edificios y juegos de la 
+   Imagen 1 pero SIN terreno ni caminos detrás. Te sirve para ver 
+   la FORMA de cada elemento más claramente, sin que el fondo 
+   distraiga. Las posiciones son las mismas que en all_layers.
 
-📎 Imagen 4 — "original.png": Ortofoto aérea real tomada con drone. 
-   Úsala para verificar qué hay realmente en cada posición y confirmar 
-   la escala real de cada edificio/estructura.
+📎 Imagen 3 — "mapa_promo.jpg": Mapa promocional ilustrado del parque.
+   Este es el ESTILO VISUAL que quiero alcanzar. Fíjate en:
+   - Cómo se ven los edificios: contornos definidos, colores sólidos, 
+     flat design, perspectiva isométrica leve
+   - Los edificios están numerados del 1 al 11
+   - La Chiwiña (#3) es un domo geodésico turquesa/azul-verde
+   - El Teatro Galpón (#5) tiene techo a dos aguas, es largo
+   - La Cafetería (#4) es rectangular con techo naranja
+   - Las casitas del bosque son pequeñas y rústicas
+   ► USA ESTA IMAGEN solo como referencia de ESTILO y DISEÑO, 
+     NO de posiciones (su contorno está distorsionado artísticamente 
+     y no coincide con mis capas).
+
+📎 Imagen 4 — "01_terreno.png": La capa de terreno (suelo del parque).
+   Muestra la silueta del parque con zonas de color plano. Te sirve 
+   para saber QUÉ HAY DEBAJO de cada edificio (tierra marrón, césped 
+   verde, estacionamiento gris). Los edificios deben quedar DENTRO 
+   de la silueta del parque, no flotar fuera de ella.
+
+📎 Imagen 5 — "02_caminos.png": La capa de caminos (fondo blanco, 
+   caminos en gris). Los edificios deben quedar AL LADO de los 
+   caminos, no tapándolos.
 
 ═══════════════════════════════════════════════════════════════
                     LO QUE NECESITO QUE HAGAS
 ═══════════════════════════════════════════════════════════════
 
 Genera UNA SOLA imagen JPG de exactamente 1400 x 700 píxeles con 
-FONDO BLANCO PURO (#FFFFFF) que contenga TODOS los edificios y juegos 
-REDIBUJADOS desde cero en estilo flat design ilustrado.
+FONDO BLANCO PURO (#FFFFFF) que contenga TODOS los edificios, juegos 
+y estructuras REDIBUJADOS en estilo flat design ilustrado.
 
-REGLA FUNDAMENTAL: Cada elemento debe aparecer en la MISMA POSICIÓN 
-(coordenadas X,Y) que tiene en mi capa de stickers (Imagen 3). NO 
-muevas nada de lugar. La alineación con las otras capas es crítica.
+REQUISITO CRÍTICO DE ALINEACIÓN:
+Cuando yo superponga tu imagen generada sobre mis capas de terreno y 
+caminos, CADA edificio debe caer EXACTAMENTE en la misma posición 
+donde está el sticker correspondiente en "all_layers.png". Si la 
+Chiwiña está en el centro-izquierda de all_layers, tu Chiwiña 
+redibujada DEBE estar en el centro-izquierda de tu imagen, en el 
+MISMO pixel. Piensa en tu imagen como una capa transparente que se 
+pone encima del terreno.
 
 ═══════════════════════════════════════════════════════════════
-                    ESTILO VISUAL OBLIGATORIO
+        ERRORES QUE DEBES EVITAR (aprendidos del intento v1)
 ═══════════════════════════════════════════════════════════════
+
+En un intento anterior, Gemini cometió estos errores. NO los repitas:
+
+❌ ERROR 1 — EDIFICIOS DEMASIADO GRANDES: El Teatro Galpón y la 
+   piscina quedaron enormes, ocupando demasiado espacio. Los edificios 
+   deben ser PEQUEÑOS en relación al mapa. Mira el mapa promo: los 
+   edificios son compactos, NO dominan el mapa.
+   
+❌ ERROR 2 — POSICIONES MOVIDAS: Varios edificios se desplazaron de 
+   su posición original. La antena/torre que está en la zona derecha 
+   del parque (sobre el bosque) se movió al centro. CADA elemento 
+   debe estar EXACTAMENTE donde aparece en all_layers.png — no lo 
+   muevas ni un pixel.
+
+❌ ERROR 3 — ELEMENTOS AGRUPADOS: Gemini juntó todos los edificios 
+   en el centro de la imagen. Los edificios están DISPERSOS por todo 
+   el ancho del mapa (desde la izquierda hasta la derecha). Mira 
+   all_layers.png: hay elementos en TODAS las zonas del parque.
+
+❌ ERROR 4 — PROPORCIONES IRREALES: La piscina era más grande que 
+   los edificios principales. Los juegos (columpios, carrusel) eran 
+   casi del tamaño de los edificios. Los juegos deben ser MUCHO más 
+   pequeños que los edificios.
+
+❌ ERROR 5 — NO ENCAJA COMO CAPA: El resultado no encajaba al 
+   superponerlo con terreno+caminos. Los edificios quedaban fuera 
+   de la silueta del parque o tapando caminos principales.
+
+═══════════════════════════════════════════════════════════════
+                    ESTILO VISUAL (copiar del mapa promo)
+═══════════════════════════════════════════════════════════════
+
+Copia el estilo visual del mapa promo (Imagen 3):
 
 PERSPECTIVA:
-- Vista isométrica leve (3/4, ángulo ~30° desde arriba)
-- TODOS los edificios deben tener la MISMA dirección de perspectiva 
-  (como si el observador estuviera arriba-izquierda mirando hacia 
-  abajo-derecha)
-- Respetar la orientación/rotación que cada edificio tiene en mi 
-  capa de stickers
+- Isométrica leve (vista 3/4, ~30° desde arriba)
+- TODOS los edificios miran hacia la misma dirección
+- Respetar la orientación que cada edificio tiene en mis stickers
 
-COLORES — Paleta unificada cálida:
-- Techos: naranja cálido (#D4874E), marrón (#8B6538), o terracota 
-  (#C4662B) según el edificio
-- Paredes: beige claro (#E8D5B7), blanco hueso (#F5F0E1), o crema 
-  (#F2E8D5)
-- Contornos de CADA edificio: línea marrón oscuro (#4A3728), grosor 
-  consistente 2-3 píxeles alrededor de todo el perímetro
-- Ventanas: rectángulos marrón medio (#6B4226) o gris azulado (#7B8FA1)
-- Puertas: rectángulos marrón oscuro (#5C3A1E)
+COLORES — Paleta cálida unificada como en el mapa promo:
+- Techos: naranja cálido (#D4874E), marrón (#8B6538), terracota 
+  (#C4662B) — observa los techos naranjas del mapa promo
+- Paredes: beige (#E8D5B7), blanco hueso (#F5F0E1), crema (#F2E8D5)
+- Contornos: línea marrón oscuro (#4A3728), 2-3px, en CADA edificio
+- Chiwiña: triángulos azul-verde (#4ABFB2), turquesa (#2E9E8F), 
+  verde agua (#3BBFA0) — como se ve en el mapa promo, es turquesa
 - Estructuras metálicas/juegos: gris (#8E8E8E) con contorno (#4A3728)
-- Chiwiña (domo geodésico): triángulos azul-verde (#4ABFB2), turquesa 
-  (#2E9E8F), verde agua (#3BBFA0) — es el edificio más llamativo
+- Ventanas: rectángulos marrón medio (#6B4226)
 
-ACABADOS para que se integren con el mapa:
-- Cada edificio debe tener una SOMBRA sutil: elipse gris oscuro 
-  semi-transparente (opacidad ~20%) proyectada hacia abajo-derecha, 
-  ligeramente más grande que la base del edificio
-- En la BASE de cada edificio, una transición suave: NO debe haber 
-  un corte recto entre el edificio y el fondo blanco. Agrega una 
-  línea de color terroso suave (#C4A882, opacidad 40%) en la base 
-  que simule el contacto con el suelo
-- Los colores deben ser SÓLIDOS y PLANOS, sin gradientes, sin texturas
-  fotográficas, sin brillos ni reflejos
+ACABADOS DE INTEGRACIÓN:
+- Sombra sutil debajo de cada edificio: elipse gris (opacidad ~20%), 
+  proyectada hacia abajo-derecha
+- Los colores deben ser SÓLIDOS y PLANOS — sin gradientes, sin 
+  texturas fotográficas, sin brillos, sin reflejos
+- Contornos limpios y definidos como en el mapa promo
 
 ═══════════════════════════════════════════════════════════════
-              TAMAÑOS IDEALES PARA CADA ELEMENTO
+     TAMAÑOS — REGLA DE ORO: COMPACTOS, NO DOMINANTES
 ═══════════════════════════════════════════════════════════════
 
-Respeta las proporciones de la ortofoto real (Imagen 4) para decidir 
-el tamaño de cada elemento. Usa estos rangos como guía:
+Mira el mapa promo (Imagen 3): los edificios son PEQUEÑOS en relación 
+al terreno total. Hay MUCHO espacio vacío entre ellos. Tu resultado 
+debe respetar esa proporción.
 
-EDIFICIOS GRANDES (los que se ven claramente en la ortofoto):
-- Chiwiña (domo geodésico): ~80-100px de ancho. Es el edificio más 
-  icónico, debe verse prominente
-- Teatro Galpón (nave alargada, techo a dos aguas): ~90-110px de 
-  ancho, alargado horizontalmente
-- Cafetería (edificio rectangular, techo naranja/marrón): ~70-90px 
-  de ancho
-- Escenario Principal (estructura abierta con techo/tinglado): 
-  ~80-100px de ancho
+TAMAÑOS MÁXIMOS (no exceder):
+- Teatro Galpón (#5, el edificio más largo): máx 120px de ancho
+- Chiwiña (#3, domo geodésico): máx 90px de ancho
+- Cafetería (#4): máx 80px de ancho
+- Escenario Principal (#8): máx 90px de ancho
+- Ingreso (#1): máx 55px de ancho
+- Boleterías (#2): máx 40px de ancho
+- Anfiteatro (#9): máx 70px de ancho
+- Casitas (Taypi/Macroregiones): máx 35px CADA casita
+- Juegos (columpios, carrusel, etc.): máx 30px CADA uno
+- Torre/antena: máx 15px de ancho (es delgada pero alta, ~60px alto)
+- Piscina/pileta: máx 50px de ancho (es mediana, NO enorme)
+- Bote/barca con flores: máx 45px de ancho
 
-EDIFICIOS MEDIANOS:
-- Ingreso/pórtico de entrada: ~50-65px de ancho
-- Boleterías (caseta de tickets al lado del ingreso): ~35-45px
-- Anfiteatro (semicírculo con graderías): ~60-80px de ancho
-
-JUEGOS Y ESTRUCTURAS PEQUEÑAS:
-- Columpios, toboganes, carrusel, sube-y-baja: ~25-40px cada uno
-- Deben verse como íconos flat, reconocibles pero no demasiado 
-  detallados
-- Casitas de Taypi / Macroregiones: ~30-45px cada casita
-
-REGLA DE ESCALA: Ningún juego debe ser más grande que un edificio 
-mediano. La Chiwiña y el Teatro Galpón deben ser los elementos más 
-grandes de toda la capa.
+JERARQUÍA DE TAMAÑO (de mayor a menor):
+1. Teatro Galpón ≈ Chiwiña (los más grandes)
+2. Cafetería ≈ Escenario Principal (grandes)
+3. Anfiteatro ≈ Ingreso ≈ Piscina (medianos)
+4. Casitas ≈ Bote/barca (pequeños)
+5. Juegos individuales ≈ Boleterías (los más chicos)
 
 ═══════════════════════════════════════════════════════════════
-             LISTA DE ELEMENTOS A REDIBUJAR
+     MAPA DE POSICIONES — DÓNDE ESTÁ CADA COSA
 ═══════════════════════════════════════════════════════════════
 
-Redibuja TODOS estos elementos que aparecen en mi capa de stickers, 
-cada uno en su posición exacta:
+Para que NO muevas nada de lugar, aquí describo la ZONA APROXIMADA 
+de cada elemento (verificar contra all_layers.png):
 
-EDIFICIOS:
-1. Ingreso — pórtico/arco de entrada al parque
+ZONA IZQUIERDA del mapa (extremo izquierdo, zona del ingreso):
+- Estructura geodésica/trepa-arañas: esquina superior-izquierda
+- Ingreso y boleterías: izquierda, donde el camino curvo entra
+- Señal de posta de salud (cruz roja): centro-izquierda
+
+ZONA CENTRO-IZQUIERDA (zona de la plaza):
+- Chiwiña (#3): domo turquesa, centro-izquierda del mapa
+- Cafetería (#4): arriba de la Chiwiña, entre los caminos
+- Antena/torre: cerca de la cafetería, zona superior
+- Aguas danzantes (fuentes): a la derecha de la Chiwiña
+
+ZONA CENTRO del mapa:
+- Teatro Galpón (#5): edificio largo, zona centro del mapa
+- Piscina/pileta: centro, entre el galpón y la zona de juegos
+- Escenario Principal (#8): centro-derecha
+
+ZONA CENTRO-DERECHA:
+- Bote/barca con flores: sobre los caminos
+- Juegos (columpios, carrusel, etc.): dispersos en esta zona
+- Anfiteatro (#9): zona inferior, cerca del estacionamiento
+
+ZONA DERECHA (zona del bosque verde):
+- Casitas de Taypi: dentro del bosque, centro-derecha
+- Casitas de Macroregiones: extremo derecho, dentro del bosque
+- Delfín rosa, juegos del bosque: dispersos en zona derecha
+- Torre/antena alta: zona derecha, sobre el bosque
+
+IMPORTANTE: Las posiciones EXACTAS están en all_layers.png. Mi 
+descripción de texto es solo orientativa. Si hay conflicto entre 
+mi texto y la imagen all_layers.png, SIGUE LA IMAGEN.
+
+═══════════════════════════════════════════════════════════════
+             LISTA COMPLETA DE ELEMENTOS A REDIBUJAR
+═══════════════════════════════════════════════════════════════
+
+Redibuja CADA elemento que ves en 03_edificios.png / all_layers.png:
+
+EDIFICIOS PRINCIPALES:
+1. Ingreso — pórtico/arco de entrada
 2. Boleterías — caseta pequeña junto al ingreso
-3. Chiwiña — domo geodésico grande (triángulos azul-verde/turquesa)
+3. Chiwiña — domo geodésico grande (turquesa/azul-verde)
 4. Cafetería — edificio rectangular, techo naranja-marrón
-5. Teatro Galpón — nave alargada con techo a dos aguas
-6. Escenario Principal — estructura abierta con techo tipo tinglado
-7. Anfiteatro — semicírculo con graderías escalonadas
+5. Teatro Galpón — nave alargada, techo a dos aguas (el más largo)
+6. Escenario Principal — estructura abierta con techo/tinglado
+7. Anfiteatro — semicírculo con graderías
 
-JUEGOS Y ATRACCIONES (dibujar como íconos flat sencillos):
-- Bote decorativo / barca con flores
-- Piscina / pileta (rectángulo azul con borde)
+JUEGOS Y ATRACCIONES (íconos flat PEQUEÑOS):
+- Trepa-arañas/estructura geodésica (esquina sup-izquierda)
+- Bote/barca con flores (centro-derecha)
+- Piscina/pileta (rectángulo azul, tamaño mediano NO enorme)
 - Columpios (estructura con asientos colgantes)
-- Tobogán (rampa curva con escalera)
-- Carrusel / calesita (estructura circular con techo cónico)
+- Carrusel/calesita (circular con techo cónico)
 - Sube-y-baja (tabla sobre pivote)
-- Rueda de ejercicio / juego circular
-- Delfín rosa (escultura decorativa)
-- Fuente o elemento de agua
+- Delfín rosa (escultura decorativa, zona derecha)
+- Juegos del bosque (zona derecha, pequeños)
 
-CASITAS / CABAÑAS:
-- Casitas Taypi — 3-4 casitas rústicas pequeñas agrupadas
-- Casitas Macroregiones — casitas dispersas en zona derecha
-- Torre/antena (estructura vertical delgada)
+OTROS:
+- Señal posta de salud (cruz roja en cartel)
+- Torre/antena (estructura vertical delgada y alta)
+- Casitas Taypi (3-4 casitas rústicas, zona bosque)
+- Casitas Macroregiones (casitas, extremo derecho)
+- Fuente/aguas danzantes (junto a la Chiwiña)
 
 ═══════════════════════════════════════════════════════════════
                         PROHIBIDO
 ═══════════════════════════════════════════════════════════════
 
-❌ Terreno, césped, tierra, colores de fondo (SOLO fondo blanco)
+❌ Terreno, césped, tierra, fondos de color (SOLO fondo blanco puro)
 ❌ Caminos, senderos, calles
-❌ Árboles, arbustos, vegetación de cualquier tipo
+❌ Árboles, arbustos, vegetación
 ❌ Texto, números, etiquetas, nombres
 ❌ Personas, animales reales, vehículos
-❌ Nubes, sol, cielo, decoraciones externas
+❌ Nubes, sol, cielo, decoraciones
 ❌ Flechas, líneas guía, marcos
-❌ Elementos que no estén en mi capa de stickers
-❌ Mover elementos de su posición original
+❌ Mover elementos de su posición en all_layers.png
+❌ Hacer edificios más grandes que el tamaño máximo indicado
 ❌ Gradientes, texturas fotográficas, efectos 3D realistas
+❌ Inventar elementos que no existan en mis stickers
 ```
 
 ### PASO 3.2 — Tu trabajo manual después
